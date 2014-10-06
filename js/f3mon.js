@@ -702,7 +702,7 @@ var microstatesChart = {
                 return;
             }
         }
-        else if (runInfo.status == "CLOSED") { this.status = "off"; this.chart.showLoading("No data for this run");}
+        else if (runInfo.status == "CLOSED") { this.status = "off"; this.chart.showLoading(NODATACHART);}
         microstatesChart.next();
     },
     next : function() {

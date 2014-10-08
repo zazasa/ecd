@@ -294,16 +294,14 @@ var streamChart = {
     run : function(){
         console.log("streamChart...");
         if(riverStatus.collector.status){this.ongoing = true;}
-        if (this.ongoing && runInfo.runNumber && runInfo.streams && !streamChart.sliderChanging){
+        if ((this.ongoing || this.updateUnit) && runInfo.streams && !streamChart.sliderChanging){
             streamChart.updateSlider();
             if(!streamChart.zoomed){
                 streamChart.minLs = $("#ls-slider").rangeSlider("min");
                 streamChart.maxLs = $("#ls-slider").rangeSlider("max");
                 streamChart.updateChart();        
             }            
-            return;
-        } 
-        streamChart.next();
+        } else {streamChart.next(); }
     },
     updateChart : function(){
         clearTimeout(streamChart.timer);        
@@ -784,8 +782,6 @@ var logTable = {
     }
 }
 
-
-
 function getIndices(){
     console.log("GetIndices...");
     $.when($.getJSON('php/getIndices.php'))
@@ -815,7 +811,7 @@ function setControls(){
     $('#btn-unit-e').click(function() {    
         if ($('#btn-unit-e').hasClass('btn-primary')){return;}
         streamChart.unit="Events";
-        streamChart.updateUnit==true;
+        streamChart.updateUnit=true;
         $('#btn-unit-e').removeClass('btn-default');
         $('#btn-unit-e').addClass('btn-primary');
         $('#btn-unit-b').removeClass('btn-primary');
@@ -824,7 +820,7 @@ function setControls(){
     })
     $('#btn-unit-b').click(function() {    
         streamChart.unit="Bytes";
-        streamChart.updateUnit==true;
+        streamChart.updateUnit=true;
         if ($('#btn-unit-b').hasClass('btn-primary')){return;}
         $('#btn-unit-b').removeClass('btn-default');
         $('#btn-unit-b').addClass('btn-primary');

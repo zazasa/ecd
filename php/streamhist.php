@@ -177,10 +177,17 @@ $res=json_decode(esQuery($stringQuery,$index), true);
 $minimerge = array(
     "percents" => array()
 );
+$mmStreamList = array();
+foreach ($streamList as $stream){
+    if (!startsWith($stream,"DQM")){
+        $mmStreamList[] = $stream;
+    }
+}
+
 
 $took = $took + $res["took"];
 $minimerge["took"] = $took;
-$streamNum = count($streamList);
+$streamNum = count($mmStreamList);
 
 $lsList = $res["aggregations"]["inrange"]["ls"]["buckets"];
 foreach ($lsList as $item ) {

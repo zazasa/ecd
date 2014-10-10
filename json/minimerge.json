@@ -16,6 +16,13 @@
                            "value": "Error"
                         }
                      }
+                  },
+                  {
+                     "prefix": {
+                        "stream": {
+                           "value": "DQM"
+                        }
+                     }
                   }
                ]
             }

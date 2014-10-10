@@ -15,6 +15,7 @@ if(!isset($_GET["streamList"])) $streamList = array("a","b");
     else $streamList = $_GET["streamList"]; 
 
 
+
 //GET TOTAL
 $index = "runindex_".$sysName."_read/eols"; 
 $query = "teols.json";

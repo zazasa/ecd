@@ -236,8 +236,8 @@ hrChartConfig =
             duration : 500,
             easing: 'linear'
         },
-        renderTo : "hltrates-chart",
-        //height: 400,
+        //renderTo : "hltrates-chart",
+        height: 200,
         //zoomType: 'x',
         //events: {},
     },

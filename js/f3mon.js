@@ -618,7 +618,8 @@ var hrChart = {
                 timePerLs   : timeperls,
             })).done(function(j){
                     //console.log("hr j: ",j);
-                    j.forEach(function(path){
+                    pa = j["path-accepted"];
+                    pa.forEach(function(path){
                         //console.log("hrpath: ",path);
                         name = path.name;
                         data = path.data;

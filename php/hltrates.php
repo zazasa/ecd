@@ -60,15 +60,7 @@ foreach ($hits as $hit ) {
         //var_dump($dataName);
 
     
-    //    $pathAccepted = $hit["_source"]["path-accepted"];
-    //    $pathRejected = $hit["_source"]["path-rejected"];
-    //    $pathWasRun = $hit["_source"]["path-wasrun"];
-    //    $pathErrors = $hit["_source"]["path-errors"];
-    //    $pathAfterPrescale = $hit["_source"]["path-afterprescale"];
-    //    $pathAfterL1Seed = $hit["_source"]["path-afterl1seed"];
-    //
-    //    $datasetAccepted = $hit["_source"]["dataset-accepted"];
-    
+     
         if (!array_key_exists($dataName, $dataAccepted)){ $dataAccepted[$dataName] = array();}
         
 

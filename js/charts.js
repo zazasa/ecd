@@ -103,7 +103,6 @@ msChartConfig =
         itemDistance: 5,
         symbolRadius: 5
     },
-    colors: Colors.colorList(),
     type: 'area',
 
     title: {

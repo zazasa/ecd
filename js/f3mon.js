@@ -23,7 +23,6 @@ var runInfo = {
         this.streams = false; this.status = false;
     },
     run : function(){
-        console.log("Runinfo:"+runInfo.runNumber,runInfo.startTime,runInfo.endTime,runInfo.streams,runInfo.lastLs,runInfo.status,runInfo.sysName);
         if(riverStatus.collector.status){$("#runCollecting").fadeToggle(Math.round(runInfo.interval/2))}
             else {$("#runCollecting").fadeOut(Math.round(runInfo.interval/2))}
         if (!this.runNumber){ this.status = "NORUN"; this.running = false; runInfo.updateUi();}
@@ -79,7 +78,6 @@ var runRanger = {
     start : function(){ this.running = true; this.run(); },
     stop : function(){ clearTimeout(this.timer); this.running = false; },
     run : function(){
-        console.log("Runranger...");
         $.getJSON('php/runList.php',{size : 1, sysName: runInfo.sysName},
             function(j){
                 run = j["runlist"][0];
@@ -111,7 +109,6 @@ var riverStatus = {
         this.status = "CHECKING...";
     },
     run : function(){
-        console.log("RiverStatus...");
 
         $.when($.getJSON('php/riverStatus.php'))
             .then(function(j){
@@ -145,7 +142,6 @@ var riverStatus = {
             })
 
 
-        //console.log("river status main,collector ",riverStatus.main,riverStatus.collector);
         if (riverStatus.running){riverStatus.timer = setTimeout(function(){riverStatus.run()},riverStatus.interval)};
     },
     updateUi : function(){
@@ -165,7 +161,6 @@ var riverStatus = {
 
         $('#riverstatus').attr('data-content',outString )
 
-        //console.log(riverStatus);
         if (riverStatus.status=="OK"){$("#riverstatus").addClass("btn-success"); }
         else if (riverStatus.status=="WARNING" || riverStatus =="DANGER"){ $("#riverstatus").addClass("btn-warning"); }
         else if (riverStatus.status=="FAIL"){$("#riverstatus").addClass("btn-danger")}
@@ -184,7 +179,6 @@ var runList = {
     start : function(){this.running = true; this.run(); },
     stop : function(){ clearTimeout(this.timer); this.running = false; },
     run : function(){
-        console.log("runList...");
         if (!runList.table){
             runListTable.ajax = "php/runListTable.php?sysName="+runInfo.sysName;
             runListTable.initComplete = runList.updateUi;    
@@ -216,7 +210,6 @@ var disksStatus = {
     start : function(){ this.running = true; this.run(); },
     stop : function(){ clearTimeout(this.timer); this.running = false; },
     run : function(){
-        console.log("disksStatus...");
 
         if (runInfo.runNumber){
             $.getJSON('php/getDisksStatus.php', { runNumber : runInfo.runNumber, sysName: runInfo.sysName },
@@ -292,7 +285,6 @@ var streamChart = {
 
     },
     run : function(){
-        console.log("streamChart...");
         if(riverStatus.collector.status){this.ongoing = true;}
         if ((this.ongoing || this.updateUnit) && runInfo.streams && !streamChart.sliderChanging){
             streamChart.updateSlider();
@@ -364,7 +356,6 @@ var streamChart = {
                 timePerLs   : streamChart.timePerLs,
             })).done(function(j){
 
-                    //console.log(j);
 
                     streamList = j.streamList;
                     took = j.took;
@@ -378,7 +369,6 @@ var streamChart = {
 
                     streamList.forEach(function(stream){
                         streamData = j.streams[stream]
-                        //console.log(stream,streamData.dataIn.toString(),totals.toString());
                         if (streamChart.unit == "Events"){ data = streamData.dataOut; }
                         else{ data = streamData.fileSize; }    
                         serie = streamChart.chart.get(stream);
@@ -391,8 +381,6 @@ var streamChart = {
                     })
 
 
-                    //console.log(mmdata.total);
-                    //console.log(data);
 
                     $("#querytime").text(took.toString()+" ms");
                     streamChart.chart.xAxis[0].setCategories(lsList); //doenst work. dunno why.
@@ -420,7 +408,6 @@ var streamChart = {
         if(streamChart.slider){$("#ls-slider").rangeSlider("destroy");$("#ls-slider").unbind();};
         $("#ls-slider").rangeSlider(ls_slider);
         $("#ls-slider").bind("valuesChanged", function(e, data){
-            console.log("Values just changed. min: " + data.values.min + " max: " + data.values.max);
             if (data.values.max == runInfo.lastLs) { streamChart.sliderBound = true} else {streamChart.sliderBound=false}
             //if (!streamChart.zoomed){
             //    streamChart.minLs = data.values.min;
@@ -430,7 +417,6 @@ var streamChart = {
             
         });
         $("#ls-slider").bind("userValuesChanged", function(e, data){
-            //console.log("userValuesChanged");
             streamChart.minLs = data.values.min;
             streamChart.maxLs = data.values.max;
             streamChart.updateChart();   
@@ -446,7 +432,6 @@ var streamChart = {
         sliderTickStep = parseInt(runInfo.lastLs / 10 );
         $("#ls-slider").rangeSlider("bounds", 1, runInfo.lastLs);
         range = $("#ls-slider").rangeSlider("values");
-        console.log("sliderbound: " , streamChart.sliderBound);
         if (streamChart.sliderBound) {
             diff = runInfo.lastLs - range.max;
             $("#ls-slider").rangeSlider("values", range.min+diff, runInfo.lastLs);
@@ -475,7 +460,6 @@ var streamChart = {
     },
     mmDrillDown : function(event){    //second level drill down
         stream = event.point.name;
-        console.log(stream);
         $.when(  $.getJSON('php/miniperbu.php?',
             {
                 runNumber   : runInfo.runNumber,
@@ -484,7 +468,6 @@ var streamChart = {
                 sysName     : runInfo.sysName,
                 stream      : stream,
             })).done(function(j){
-                console.log(j);
                 serie = streamChart.mchart.addSeriesAsDrilldown(event.point, { 
                     type    : 'column',
                     id      : "drilldown",
@@ -497,9 +480,6 @@ var streamChart = {
             })
     },
     mDrillDown : function(event){   //first level drill down
-        console.log(event);
-        console.log(event.point);
-        console.log(event.point.name);
 
         streamChart.mMinLs = event.point.name;
         if (streamChart.lsInterval == 1) { streamChart.mMaxLs = streamChart.mMinLs }
@@ -513,7 +493,6 @@ var streamChart = {
                 sysName     : runInfo.sysName,
                 streamList  : runInfo.streams,
             })).done(function(j){
-                console.log(j);
                 if (streamChart.mchart) { streamChart.mchart.destroy(); }
                 mChartConfig.chart.events.drilldown = streamChart.mmDrillDown;
                 mChartConfig.chart.events.drillup = streamChart.mmDrillUp;
@@ -532,8 +511,6 @@ var streamChart = {
             })
     },
     selection : function(event){          
-        console.log("selection");
-        console.log(event);
 
 
         if (event.xAxis) {
@@ -542,8 +519,6 @@ var streamChart = {
             min = Math.round(xAxis.min);
             max = Math.round(xAxis.max);
 
-            console.log(xAxis.axis.categories);
-            //console.log(streamChart.chart.xAxis[0].categories);
             min = xAxis.axis.categories[min];
             max = xAxis.axis.categories[max];
 
@@ -598,7 +573,6 @@ var hrChart = {
 
     },
     run : function(){
-        console.log("hrChart...");
         if (runInfo.runNumber){
             hrChart.updateChart();   
             return;     
@@ -609,7 +583,6 @@ var hrChart = {
         
         clearTimeout(hrChart.timer); 
         timeperls = $("#timeperls").val();
-        //console.log(timeperls);
 
         $.when(  $.getJSON('php/hltrates.php?',
             {
@@ -617,13 +590,10 @@ var hrChart = {
                 numVal      : hrChart.numVal,
                 timePerLs   : timeperls,
             })).done(function(j){
-                    //console.log("hr j: ",j);
                     pa = j["path-accepted"];
                     pa.forEach(function(path){
-                        //console.log("hrpath: ",path);
                         name = path.name;
                         data = path.data;
-                        //console.log("hrdata: ",data);
                         serie = hrChart.chart.get(name);
                         if (serie == null){
                             serie = hrChart.chart.addSeries({
@@ -676,7 +646,6 @@ var microstatesChart = {
         if(this.chart){this.chart.showLoading(WAITINGCHART);}
     },
     run : function(){
-        console.log("microstatesChart...");
         if (riverStatus.collector.status){
             if (microstatesChart.status == "off"){ this.getLegend(); }
             else if (microstatesChart.status == "ready"){
@@ -684,7 +653,6 @@ var microstatesChart = {
                 .then( function(j){
                     time = j.time;
                     data = j.entries;
-                    //console.log(data);
                     if (time != microstatesChart.lastTime){
                         microstatesChart.lastTime = time;
                         microstatesChart.series.forEach(function(id){
@@ -714,7 +682,6 @@ var microstatesChart = {
         this.chart.showLoading(WAITINGCHART);
     },
     getLegend : function(){
-        console.log("Microstate getLegend");
         if (microstatesChart.status == "off"){
             microstatesChart.status = "waitingforlegend";
             $.when($.getJSON("php/ulegenda.php?", { runNumber : runInfo.runNumber, sysName: runInfo.sysName }))
@@ -756,9 +723,7 @@ var logTable = {
     start : function(){ this.running = true; this.run(); },
     stop : function(){ clearTimeout(this.timer); this.running = false; },
     run : function(){
-        console.log("logTable...");
         if (!logTable.table){
-            console.log("Create table");
             logTableConfig.initComplete = logTable.updateUi;    
             logTable.table = $('#logTable').DataTable(logTableConfig);
         }
@@ -784,7 +749,6 @@ var logTable = {
 }
 
 function getIndices(){
-    console.log("GetIndices...");
     $.when($.getJSON('php/getIndices.php'))
     .then(function(j){
         runInfo.indexList = j;
@@ -802,7 +766,6 @@ function getIndices(){
 }
 
 function setControls(){
-    console.log("setControls")
 
     $('#srdivisorcb').change(function() {
         streamChart.updateUnit = true;
@@ -851,8 +814,6 @@ function setControls(){
         runInfo.sysName = $(this).find("a").text();
         runInfo.indexName = runInfo.indexList[runInfo.sysName];
         $("#indexname").text(runInfo.sysName);
-        console.log(runInfo.indexList);
-        console.log("Index changed to: "+runInfo.indexName)
         
     })
 
@@ -898,7 +859,6 @@ function setControls(){
     });
 
     $("#runListTable").on("click", ".run-show",function() {
-        //console.log($(this).closest(".row-tools").parent().html());
         rn = $(this).closest(".row-tools").attr("number");
 
         runRanger.stop();
@@ -921,17 +881,13 @@ function setControls(){
         $.when($.getJSON('php/startCollector.php',{runNumber : runInfo.runNumber, sysName: runInfo.sysName}))
         .then(
             function(j){
-             console.log("Start collector for run: "+runInfo.runNumber);
-             console.log(j);
         })
     });
 
     $("#closeModal").on("click", ".run-close-ok",function() {
-        //console.log(selectedRun);
         $.when($.getJSON('php/closeRun.php',{runNumber : selectedRun, sysName: runInfo.sysName}))
         .then(
             function(j){
-             console.log(selectedRun+" closed.");
         })
 
     });
@@ -944,7 +900,6 @@ function runReady(){
 };
 
 function startItAll(){
-    console.log("startItAll");
     getIndices();
     runInfo.start();   
     runRanger.start();
@@ -959,7 +914,6 @@ function startItAll(){
 };
 
 function changeRun(runNumber){
-    console.log("Changing runNmber to: "+runNumber);
 
     runInfo.stop();
     riverStatus.stop()

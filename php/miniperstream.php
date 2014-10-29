@@ -15,6 +15,7 @@ if(!isset($_GET["streamList"])) $streamList = array("a","b");
     else $streamList = $_GET["streamList"]; 
 
 
+$streamNum = count($streamList);
 
 //GET TOTAL
 $index = "runindex_".$sysName."_read/eols"; 
@@ -47,13 +48,14 @@ $doc_count = $res["aggregations"]["hits"]["total"];
 $index = "runindex_".$sysName."_read/minimerge"; 
 $query = "miniperstream.json";
 
-$stringQuery = file_get_contents("../json/".$query);
 
+$stringQuery = file_get_contents("../json/".$query);
 $jsonQuery = json_decode($stringQuery,true);
 
 $jsonQuery["query"]["bool"]["must"][1]["prefix"]["_id"] = "run".$runNumber;
 $jsonQuery["query"]["bool"]["must"][0]["range"]["ls"]["from"]= $from;
 $jsonQuery["query"]["bool"]["must"][0]["range"]["ls"]["to"]= $to;
+$jsonQuery["aggs"]["stream"]["terms"]["size"] = $streamNum+1;
 
 $stringQuery = json_encode($jsonQuery);
 //var_dump($stringQuery);
@@ -65,8 +67,6 @@ $res=json_decode(esQuery($stringQuery,$index), true);
 $out = array(
     "percents" => array(),
 );
-
-$streamNum = count($streamList);
 
 $streams = $res["aggregations"]["stream"]["buckets"];
 foreach ($streams as $item ) {

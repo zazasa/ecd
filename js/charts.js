@@ -89,9 +89,6 @@ msChartConfig =
         renderTo : "microstatestime-chart",
         //height: 400,
         zoomType: 'xy',            
-        
-
-
     },
     legend: {
         layout: "vertical",

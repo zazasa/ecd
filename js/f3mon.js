@@ -896,7 +896,7 @@ function setControls(){
 function runReady(){
     streamChart.start();
     microstatesChart.start();
-    hrChart.start(); 
+//    hrChart.start(); 
 };
 
 function startItAll(){
@@ -909,7 +909,7 @@ function startItAll(){
     logTable.start();
     
     streamChart.init(); 
-    hrChart.init(); 
+//    hrChart.init(); 
     microstatesChart.init();
 };
 
@@ -918,7 +918,7 @@ function changeRun(runNumber){
     runInfo.stop();
     riverStatus.stop()
     streamChart.stop();
-    hrChart.stop();
+//    hrChart.stop();
     microstatesChart.stop();
     
     runInfo.runNumber = runNumber;
@@ -926,7 +926,7 @@ function changeRun(runNumber){
     runInfo.start();
     riverStatus.start()
     streamChart.init();
-    hrChart.init();
+//    hrChart.init();
     microstatesChart.init();
 }
 

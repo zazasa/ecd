@@ -83,54 +83,56 @@ Colors.colorList = function(){
     return colors;
 }
 
-//function zeroFill(data,categories){
-//    var out = new Array();
-//    categories.forEach(function(key){
-//        index = getIndexOfK(data,key);
-//        value = (index!=-1) ? data[index] : [key,0];
-//        out.push(value);
-//    });
-//    return out;
-//}
 
-// return first recurrency of k in the arr
-//function getIndexOfK(arr, k){
-//    for(var i=0; i<arr.length; i++){
-//        if (arr[i][0] == k){
-//            return i;
-//        }
-//    }
-//    return -1;
-//}
+//Timer utilities
 
-//function calcPercent(dataIn,totals,docCounts){
-//    var out = new Array();
-//    //console.log(totals.toString());
-//    //console.log(docCounts.toString());
-//    for (i = 0; i < dataIn.length; i += 1) {
-//        key = dataIn[i][0];
-//
-//        if (docCounts[i][1] == 0 ) {value = [key,0]; } 
-//        else {value = [key,100];}
-//        valueIn = dataIn[i][1];
-//        valueTot = totals[i][1];
-//        if (valueTot != 0 ){
-//            value = [key,Math.round((valueIn/valueTot)*100.)];
-//        }
-//    out.push(value);
-//    }
-//    return out;
-//}
+window.activeTimers=0;
 
-//panelPrototype = 
-//'   <div class="swiper-slide swiper-no-swiping"> 
-//    <div class="panel panel-primary">
-//    <div class="panel-heading clearfix">
-//    <span class="panel-title"><i class="fa fa-bar-chart-o"></i> 
-//    </span>
-//    </div>
-//    <div class="panel-body">
-//    </div>
-//    </div> 
-//    </div> 
-//'
+function Timer(callback, delay) {
+    var id, started, remaining = delay, running
+
+    this.start = function() {
+        if (!(callback && delay)){return;}
+        running = true
+        started = new Date()
+        id = setTimeout(function(){
+                                    callback(); 
+                                    running = false; 
+                                    window.activeTimers--;
+                                    //console.log("endTimer",id,callback)
+                                }, remaining)
+        window.activeTimers++;
+        //console.log("startTimer ",id,callback)
+    }
+
+    this.pause = function() {
+        if (running){
+            running = false
+            clearTimeout(id)
+            remaining -= new Date() - started
+        }
+    }
+
+    this.stop = function() {
+        if (running){
+            clearTimeout(id);
+            running = false;
+            window.activeTimers--;
+            //console.log("stopTimer",id,callback)
+        }
+    }
+
+    this.getTimeLeft = function() {
+        if (running) {
+            this.pause()
+            this.start()
+        }
+        return remaining
+    }
+
+    this.getStateRunning = function() {
+        return running
+    }
+
+    this.start()
+}

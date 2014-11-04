@@ -11,23 +11,23 @@ var runInfo = {
     indexList: false,
     indexName: false,
     
-    timer : false,
+    timer : new Timer(),
     interval : 5000,
     running: true,
     
 
     start : function(){ this.running = true; this.run(); },
     stop : function(){ 
-        clearTimeout(this.timer); 
+        this.timer.stop(); 
         this.running = false; this.runNumber = false; this.startTime = false; this.endTime = false; this.lastLs = false;
         this.streams = false; this.status = false;
     },
     run : function(){
-        if(riverStatus.collector.status){$("#runCollecting").fadeToggle(Math.round(runInfo.interval/2))}
-            else {$("#runCollecting").fadeOut(Math.round(runInfo.interval/2))}
+        //if(riverStatus.collector.status){$("#runCollecting").fadeToggle(Math.round(runInfo.interval/2))}
+        //    else {$("#runCollecting").fadeOut(Math.round(runInfo.interval/2))}
         if (!this.runNumber){ this.status = "NORUN"; this.running = false; runInfo.updateUi();}
         else {
-            clearTimeout(this.timer);
+            //this.timer.stop();
             //GET RUN INFO (DATE)
             dRuninfo = $.getJSON('php/runInfo.php?', { runNumber : runInfo.runNumber, sysName: runInfo.sysName },
                 function(j){
@@ -52,7 +52,7 @@ var runInfo = {
             });
             $.when(dRuninfo,dStreams,dLastLs).then(function(){
                 runInfo.updateUi();
-                if(riverStatus.collector.status){$("#runCollecting").fadeToggle(Math.round(runInfo.interval/2))}
+                //if(riverStatus.collector.status){$("#runCollecting").fadeToggle(Math.round(runInfo.interval/2))}
                 runReady();
             });
         }
@@ -66,17 +66,17 @@ var runInfo = {
         if (runInfo.startTime){$('#startTime').text(startTime);} else{ $('#startTime').text(NASTRING); }
         if (runInfo.endTime){$('#endTime').text(endTime);} else{ $('#endTime').text(NASTRING); }
 
-        if (runInfo.running){runInfo.timer = setTimeout(function(){runInfo.run()},runInfo.interval)};
+        if (runInfo.running){runInfo.timer = new Timer(function(){runInfo.run()},runInfo.interval)};
     }
 }
 
 var runRanger = {   
-    timer : false,
+    timer : new Timer(),
     interval : 5000,
     running: true,
     
     start : function(){ this.running = true; this.run(); },
-    stop : function(){ clearTimeout(this.timer); this.running = false; },
+    stop : function(){ this.timer.stop(); this.running = false; },
     run : function(){
         $.getJSON('php/runList.php',{size : 1, sysName: runInfo.sysName},
             function(j){
@@ -85,7 +85,7 @@ var runRanger = {
                     changeRun(run.runNumber);
         }})
         
-        if (runRanger.running){runRanger.timer = setTimeout(function(){runRanger.run()},runRanger.interval)};
+        if (runRanger.running){runRanger.timer = new Timer(function(){runRanger.run()},runRanger.interval)};
     },
 }
 
@@ -95,14 +95,14 @@ var riverStatus = {
     main : false,
     collector : false,
     
-    timer : false,
+    timer : new Timer(),
     interval : 10000,
     running: true,
     
 
     start : function(){ this.running = true; this.run(); },
     stop : function(){ 
-        clearTimeout(this.timer); 
+        this.timer.stop(); 
         this.running = false;   
         this.main = false;
         this.collector = false;
@@ -142,7 +142,7 @@ var riverStatus = {
             })
 
 
-        if (riverStatus.running){riverStatus.timer = setTimeout(function(){riverStatus.run()},riverStatus.interval)};
+        if (riverStatus.running){riverStatus.timer = new Timer(function(){riverStatus.run()},riverStatus.interval)};
     },
     updateUi : function(){
         riverStatus.status = "OK";
@@ -171,13 +171,13 @@ var riverStatus = {
 var runList = {  
     table: false,
 
-    timer : false,
+    timer : new Timer(),
     interval : 10000,
     running: true,
     
 
     start : function(){this.running = true; this.run(); },
-    stop : function(){ clearTimeout(this.timer); this.running = false; },
+    stop : function(){ this.timer.stop(); this.running = false; },
     run : function(){
         if (!runList.table){
             runListTable.ajax = "php/runListTable.php?sysName="+runInfo.sysName;
@@ -193,7 +193,7 @@ var runList = {
     },
     updateUi : function(){
         $('#runListNum').text("Num runs: "+runList.table.data().length);
-        if (runList.running){runList.timer = setTimeout(function(){runList.run()},runList.interval)};
+        if (runList.running){runList.timer = new Timer(function(){runList.run()},runList.interval)};
     }
 }
 
@@ -202,13 +202,13 @@ var disksStatus = {
     outdisk: 0,
     fudisk: 0,
 
-    timer : false,
+    timer : new Timer(),
     interval : 10000,
     running: true,
     
 
     start : function(){ this.running = true; this.run(); },
-    stop : function(){ clearTimeout(this.timer); this.running = false; },
+    stop : function(){ this.timer.stop(); this.running = false; },
     run : function(){
 
         if (runInfo.runNumber){
@@ -220,7 +220,7 @@ var disksStatus = {
             })    
         }
         disksStatus.updateUi();
-        if (disksStatus.running){disksStatus.timer = setTimeout(function(){disksStatus.run()},disksStatus.interval)};
+        if (disksStatus.running){disksStatus.timer = new Timer(function(){disksStatus.run()},disksStatus.interval)};
     },
     updateUi : function(){
         if (!runInfo.runNumber){
@@ -257,7 +257,7 @@ var streamChart = {
         this.lsInterval = false;
         this.zoomed= false;
     
-        this.timer = false;
+        this.timer = new Timer();
         this.interval = 5000;
         this.running= false;
 
@@ -277,7 +277,7 @@ var streamChart = {
         this.run(); 
     },
     stop : function(){ 
-        clearTimeout(this.timer); 
+        this.timer.stop(); 
         this.running = false; 
         this.zoomed= false;
         this.disableDrillDown();
@@ -296,7 +296,6 @@ var streamChart = {
         } else {streamChart.next(); }
     },
     updateChart : function(){
-        clearTimeout(streamChart.timer);        
         $("#srUpdating").fadeToggle(Math.round(streamChart.interval/2));
         serie = streamChart.chart.get("minimerge");
         if (serie == null){
@@ -310,7 +309,6 @@ var streamChart = {
                 cursor          : "pointer"
             });
         }
-
         runInfo.streams.forEach(function(stream){
                 //Creates data and total serie if doesnt exist
                 serie = streamChart.chart.get(stream);
@@ -331,7 +329,6 @@ var streamChart = {
                     });
                 }
         });
-
         if (streamChart.updateUnit){
             if ($('#srdivisorcb').is(':checked')) {
                 unit = streamChart.unit+"/s"; 
@@ -344,7 +341,6 @@ var streamChart = {
             streamChart.chart.yAxis[0].update({title: {text: unit}},false); 
             streamChart.updateUnit = false;
         }
-
         $.when(  $.getJSON('php/streamhist.php?',
             {
                 runNumber   : runInfo.runNumber,
@@ -394,8 +390,7 @@ var streamChart = {
             })
     },
     next: function(){
-        clearTimeout(streamChart.timer); 
-        if (streamChart.running){streamChart.timer = setTimeout(function(){streamChart.run()},streamChart.interval)};      
+        if (streamChart.running){streamChart.timer = new Timer(function(){streamChart.run()},streamChart.interval)};      
     },
     initChart: function(){
         if (this.chart) { this.chart.destroy(); }
@@ -422,7 +417,7 @@ var streamChart = {
             streamChart.updateChart();   
         });
         $("#ls-slider").bind("valuesChanging", function(e, data){
-            clearTimeout(streamChart.timer);
+            streamChart.timer.stop();
         });
         streamChart.slider = true;
         streamChart.sliderBound = true;
@@ -567,7 +562,7 @@ var hrChart = {
         this.run(); 
     },
     stop : function(){ 
-        clearTimeout(this.timer); 
+        this.timer.stop();
         this.running = false; 
         if(this.chart){this.chart.showLoading(WAITINGCHART);}
 
@@ -581,7 +576,7 @@ var hrChart = {
     },
     updateChart : function(){
         
-        clearTimeout(hrChart.timer); 
+        hrChart.timer.stop(); 
         timeperls = $("#timeperls").val();
 
         $.when(  $.getJSON('php/hltrates.php?',
@@ -611,8 +606,8 @@ var hrChart = {
             })
     },
     next: function(){
-        clearTimeout(hrChart.timer); 
-        if (hrChart.running){hrChart.timer = setTimeout(function(){hrChart.run()},hrChart.interval)};      
+        hrChart.timer.stop(); 
+        if (hrChart.running){hrChart.timer = new Timer(function(){hrChart.run()},hrChart.interval)};      
     },
     initChart: function(){
         if (this.chart) { this.chart.destroy(); }
@@ -627,7 +622,7 @@ var microstatesChart = {
         this.status= "off"; //off; waitingforlegend; ready
         this.lastTime= 0;
         this.series= [];
-        this.timer = false;
+        this.timer = new Timer();
         this.interval = 5000;
         this.running= false;
         this.initChart();
@@ -638,7 +633,7 @@ var microstatesChart = {
         this.run(); 
     },
     stop : function(){ 
-        clearTimeout(this.timer); 
+        this.timer.stop(); 
         this.running = false;
         this.status = "off"; 
         this.lastTime = 0;
@@ -673,8 +668,8 @@ var microstatesChart = {
         microstatesChart.next();
     },
     next : function() {
-        clearTimeout(microstatesChart.timer); 
-        if (microstatesChart.running){microstatesChart.timer = setTimeout(function(){microstatesChart.run()},microstatesChart.interval)};
+        microstatesChart.timer.stop(); 
+        if (microstatesChart.running){microstatesChart.timer = new Timer(function(){microstatesChart.run()},microstatesChart.interval)};
     },
     initChart : function(){
         if (this.chart) { this.chart.destroy(); }
@@ -715,13 +710,13 @@ var logTable = {
     table: false,
     scrollPos: 0,
 
-    timer : false,
+    timer : new Timer(),
     interval : 30000,
     running: true,
     
 
     start : function(){ this.running = true; this.run(); },
-    stop : function(){ clearTimeout(this.timer); this.running = false; },
+    stop : function(){ this.timer.stop(); this.running = false; },
     run : function(){
         if (!logTable.table){
             logTableConfig.initComplete = logTable.updateUi;    
@@ -744,7 +739,7 @@ var logTable = {
             $('#logNum').removeClass("label-danger");
             $('#logNum').addClass("label-success");
         }
-        if (logTable.running){logTable.timer = setTimeout(function(){logTable.run()},logTable.interval)};   
+        if (logTable.running){logTable.timer = new Timer(function(){logTable.run()},logTable.interval)};   
     }
 }
 
@@ -826,7 +821,7 @@ function setControls(){
         mode: "horizontal"
     });
 
-    //setTimeout(function () { mySwiper.reInit(); mySwiper.resizeFix(true); }, 500);
+    //new Timer(function () { mySwiper.reInit(); mySwiper.resizeFix(true); }, 500);
     $(".btn-dd").click(function(e){
         streamChart.selectDD();
     });
@@ -895,7 +890,7 @@ function setControls(){
 
 function runReady(){
     streamChart.start();
-    microstatesChart.start();
+//    microstatesChart.start();
 //    hrChart.start(); 
 };
 
@@ -906,11 +901,11 @@ function startItAll(){
     riverStatus.start();
     runList.start();
     disksStatus.start();
-    logTable.start();
-    
+    logTable.start();    
     streamChart.init(); 
-//    hrChart.init(); 
     microstatesChart.init();
+
+//    hrChart.init(); 
 };
 
 function changeRun(runNumber){
@@ -918,17 +913,28 @@ function changeRun(runNumber){
     runInfo.stop();
     riverStatus.stop()
     streamChart.stop();
-//    hrChart.stop();
     microstatesChart.stop();
-    
+//    hrChart.stop();
+
     runInfo.runNumber = runNumber;
     
     runInfo.start();
     riverStatus.start()
     streamChart.init();
-//    hrChart.init();
     microstatesChart.init();
+//    hrChart.init();
+
 }
+
+function dumpInfo(ms){
+    console.log("Num timers set: "+window.activeTimers);
+    window.t = new Timer(function(){dumpInfo(ms)},ms);   
+}
+
+
+
 
 setControls();
 startItAll();
+
+dumpInfo(3000);

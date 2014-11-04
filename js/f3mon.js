@@ -58,8 +58,8 @@ var runInfo = {
         }
     },
     updateUi : function(){        
-        endTime = (runInfo.endTime && runInfo.endTime != "ongoing") ? new Date(runInfo.endTime).toLocaleString() : runInfo.endTime;
-        startTime = (runInfo.startTime) ? new Date(runInfo.startTime).toLocaleString() : runInfo.startTime;
+        endTime = (runInfo.endTime && runInfo.endTime != "ongoing") ? new Date(runInfo.endTime).toString("dd/MM/yy HH:mm") : runInfo.endTime;
+        startTime = (runInfo.startTime) ? new Date(runInfo.startTime).toString("dd/MM/yy HH:mm") : runInfo.startTime;
         if (runInfo.runNumber){ $('#runNumber').text(runInfo.runNumber); } else{ $('#runNumber').text("no Run ongoing");  }
         if (runInfo.lastLs){ $('#lastls').text(runInfo.lastLs); } else{ $('#lastls').text(NASTRING);}
         if (runInfo.streams){ $('#streams').text(runInfo.streams.join(", ")); } else{ $('#streams').text(NASTRING)}

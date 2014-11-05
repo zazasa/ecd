@@ -239,7 +239,7 @@ var streamChart = {
     mchart : false,
     init : function(){
 
-        this.updateUnit = false;
+        this.updateUnit = true;
         this.timePerLs = 1;
         
         this.sliderBound= true;

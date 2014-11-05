@@ -180,19 +180,17 @@ var runList = {
     stop : function(){ this.timer.stop(); this.running = false; },
     run : function(){
         if (!runList.table){
-            runListTable.ajax = "php/runListTable.php?sysName="+runInfo.sysName;
+            //runListTable.ajax = "php/runListTable.php?sysName="+runInfo.sysName;
             runListTable.initComplete = runList.updateUi;    
-            runList.table = $('#runListTable').DataTable(runListTable);
+            runList.table = $('#runListTable').dataTable(runListTable);
         }
         else {
-            runList.table.ajax.url("php/runListTable.php?sysName="+runInfo.sysName);
-            runList.table.ajax.reload(runList.updateUi,false);
+            //runList.table.ajax.url("php/runListTable.php?sysName="+runInfo.sysName);
+            runList.table.api().ajax.reload(runList.updateUi,false);
         }
-        
-        
     },
     updateUi : function(){
-        $('#runListNum').text("Num runs: "+runList.table.data().length);
+        $('#runListNum').text("Num runs: "+runList.table.fnSettings().fnRecordsTotal());
         if (runList.running){runList.timer = new Timer(function(){runList.run()},runList.interval)};
     }
 }
@@ -393,14 +391,14 @@ var streamChart = {
         if (streamChart.running){streamChart.timer = new Timer(function(){streamChart.run()},streamChart.interval)};      
     },
     initChart: function(){
-        if (this.chart) { this.chart.destroy(); }
+        if (this.chart) { this.chart.destroy(); this.chart = false; $("#"+lsChartConfig.chart.renderTo).empty();}
         lsChartConfig.chart.events.selection = streamChart.selection;
         //lsChartConfig.chart.events.drilldown = streamChart.mmDrillDown;
         this.chart = new Highcharts.Chart(lsChartConfig);
         this.chart.showLoading(WAITINGCHART);
     },
     initSlider: function(){
-        if(streamChart.slider){$("#ls-slider").rangeSlider("destroy");$("#ls-slider").unbind();};
+        if(streamChart.slider){$("#ls-slider").rangeSlider("destroy");$("#ls-slider").empty();};
         $("#ls-slider").rangeSlider(ls_slider);
         $("#ls-slider").bind("valuesChanged", function(e, data){
             if (data.values.max == runInfo.lastLs) { streamChart.sliderBound = true} else {streamChart.sliderBound=false}
@@ -433,7 +431,7 @@ var streamChart = {
         };
     },
     disableDrillDown : function(){
-        if (streamChart.mchart) { streamChart.mchart.destroy(); streamChart.mchart = false;}
+        if (streamChart.mchart) { streamChart.mchart.destroy(); streamChart.mchart = false; $("#"+mChartConfig.chart.renderTo).empty();}
         streamChart.selectSR();
         if (!$(".btn-sr,.btn-dd").hasClass("disabled")) {$(".btn-sr,.btn-dd").addClass('disabled') };
 
@@ -488,7 +486,7 @@ var streamChart = {
                 sysName     : runInfo.sysName,
                 streamList  : runInfo.streams,
             })).done(function(j){
-                if (streamChart.mchart) { streamChart.mchart.destroy(); }
+                if (streamChart.mchart) { streamChart.mchart.destroy(); streamChart.mchart = false; $("#"+mChartConfig.chart.renderTo).empty();}
                 mChartConfig.chart.events.drilldown = streamChart.mmDrillDown;
                 mChartConfig.chart.events.drillup = streamChart.mmDrillUp;
                 streamChart.mchart = new Highcharts.Chart(mChartConfig);
@@ -610,7 +608,7 @@ var hrChart = {
         if (hrChart.running){hrChart.timer = new Timer(function(){hrChart.run()},hrChart.interval)};      
     },
     initChart: function(){
-        if (this.chart) { this.chart.destroy(); }
+        if (this.chart) { this.chart.destroy(); this.chart = false; $("#"+hrChartConfig.chart.renderTo).empty(); }
         this.chart = new Highcharts.Chart(hrChartConfig);
         this.chart.showLoading(WAITINGCHART);
     }
@@ -672,7 +670,7 @@ var microstatesChart = {
         if (microstatesChart.running){microstatesChart.timer = new Timer(function(){microstatesChart.run()},microstatesChart.interval)};
     },
     initChart : function(){
-        if (this.chart) { this.chart.destroy(); }
+        if (this.chart) { this.chart.destroy(); this.chart = false; $("#"+msChartConfig.chart.renderTo).empty(); }
         this.chart = new Highcharts.Chart(msChartConfig);
         this.chart.showLoading(WAITINGCHART);
     },

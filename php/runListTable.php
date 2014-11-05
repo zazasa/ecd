@@ -22,8 +22,8 @@ foreach($order as $item){
 }
 
 //get total run number
-$res=json_decode(esQuery("",$index."/_count"), true);
-$total = $res["count"];
+//$res=json_decode(esQuery("",$index."/_count"), true);
+//$total = $res["count"];
 
 
 
@@ -33,12 +33,16 @@ $query = "rltable";
 $stringQuery = file_get_contents("../json/".$query.".json");
 $jsonQuery = json_decode($stringQuery,true);
 
-//$jsonQuery["size"] = $size;
-$jsonQuery["size"] = $total;
+$jsonQuery["size"] = $size;
 $jsonQuery["from"] = $from;
-//$jsonQuery["sort"] = $sort;
+$jsonQuery["sort"] = $sort;
+if ($search["value"] != "" ){
+    $jsonQuery["filter"]["query"]["query_string"]["query"] = "*".$search["value"]."*";    
+}
+
 
 $stringQuery = json_encode($jsonQuery);
+//var_dump($stringQuery);
 
 $res=json_decode(esQuery($stringQuery,$index), true);
 
@@ -47,8 +51,8 @@ $ret = array();
 foreach ($res["hits"]["hits"] as $item) {
     array_push($ret, $item["_source"]);
 }
-
-$filteredTotal = intval($total) - intval($size);
+$total = $res["aggregations"]["total"]["value"];
+$filteredTotal = $res["hits"]["total"];
 
 //Output
 $output = array(

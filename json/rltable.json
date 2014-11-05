@@ -7,5 +7,12 @@
         "order": "desc"
       }
     }
-  ]
+  ],
+   "aggs":{
+       "total":{
+           "value_count":{
+               "field":"runNumber"
+           }
+       }
+   }
 }

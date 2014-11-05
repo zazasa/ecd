@@ -4,12 +4,9 @@ buttonString+= '<a role="button" class="btn btn-default btn-xs run-show" data-to
 buttonString+= '</div>'; 
 
 runListTable = {
-    //processing: true,
-    //serverSide: true,
     ajax: "php/runListTable.php",
-
+    serverSide: true,
     bAutoWidth: false,
-//    bJQueryUI: true, 
     order: [[ 1, "desc" ]],
     iDisplayLength: 5,
     lengthChange: false,
@@ -39,25 +36,18 @@ runListTable = {
         }
     ],
     serverParams : function ( aoData ) {
-        //console.log(runInfo.startTime,runInfo.endTime)
         aoData["sysName"] = runInfo.sysName;
     }
 };
 
 
 logTableConfig = {
-    //processing: true,
     serverSide: true,
     ajax: "php/logtable.php",
     scrollY: "400px",
     scrollCollapse: true,
     autoWidth: false,
-    //bJQueryUI: true, 
     order: [[ 3, "desc" ]],
-    //iDisplayLength: 5,
-    //lengthChange: false,
-    //info: false,
-    //dom: '<flrtip>',   
     language: {
          infoFiltered: ""
     },

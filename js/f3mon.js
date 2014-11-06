@@ -58,8 +58,8 @@ var runInfo = {
         }
     },
     updateUi : function(){        
-        endTime = (runInfo.endTime && runInfo.endTime != "ongoing") ? new Date(runInfo.endTime).toLocaleString() : runInfo.endTime;
-        startTime = (runInfo.startTime) ? new Date(runInfo.startTime).toLocaleString() : runInfo.startTime;
+        endTime = (runInfo.endTime && runInfo.endTime != "ongoing") ? new Date(runInfo.endTime).toString("dd/MM/yy HH:mm") : runInfo.endTime;
+        startTime = (runInfo.startTime) ? new Date(runInfo.startTime).toString("dd/MM/yy HH:mm") : runInfo.startTime;
         if (runInfo.runNumber){ $('#runNumber').text(runInfo.runNumber); } else{ $('#runNumber').text("no Run ongoing");  }
         if (runInfo.lastLs){ $('#lastls').text(runInfo.lastLs); } else{ $('#lastls').text(NASTRING);}
         if (runInfo.streams){ $('#streams').text(runInfo.streams.join(", ")); } else{ $('#streams').text(NASTRING)}
@@ -618,11 +618,12 @@ var microstatesChart = {
     chart: false,
     init : function() {
         this.status= "off"; //off; waitingforlegend; ready
-        this.lastTime= 0;
-        this.series= [];
+        this.lastTime = 0;
+        this.series = [];
         this.timer = new Timer();
         this.interval = 5000;
         this.running= false;
+        this.initStatus = false;
         this.initChart();
     },
     start : function(){ 
@@ -636,10 +637,11 @@ var microstatesChart = {
         this.status = "off"; 
         this.lastTime = 0;
         this.series = [];
+        this.initStatus = false;
         if(this.chart){this.chart.showLoading(WAITINGCHART);}
     },
     run : function(){
-        if (riverStatus.collector.status){
+        if (microstatesChart.initStatus && riverStatus.collector.status){
             if (microstatesChart.status == "off"){ this.getLegend(); }
             else if (microstatesChart.status == "ready"){
                 $.when( $.getJSON('php/nstates.php',{sysName: runInfo.sysName}))
@@ -670,9 +672,10 @@ var microstatesChart = {
         if (microstatesChart.running){microstatesChart.timer = new Timer(function(){microstatesChart.run()},microstatesChart.interval)};
     },
     initChart : function(){
-        if (this.chart) { this.chart.destroy(); this.chart = false; $("#"+msChartConfig.chart.renderTo).empty(); }
+        if (this.chart) { this.chart.destroy(); this.chart = false; $("#"+msChartConfig.chart.renderTo).empty().unbind(); }
         this.chart = new Highcharts.Chart(msChartConfig);
         this.chart.showLoading(WAITINGCHART);
+        this.initStatus = true;
     },
     getLegend : function(){
         if (microstatesChart.status == "off"){
@@ -684,7 +687,6 @@ var microstatesChart = {
                 names.forEach(function(name){
                     value = name.split("=");
                     if (value[1] != "" && name != ""){
-
                         value[0] = parseInt(value[0]);
                         microstatesChart.series.push(value[0]);
                         serie = microstatesChart.chart.addSeries({
@@ -888,7 +890,7 @@ function setControls(){
 
 function runReady(){
     streamChart.start();
-//    microstatesChart.start();
+    microstatesChart.start();
 //    hrChart.start(); 
 };
 

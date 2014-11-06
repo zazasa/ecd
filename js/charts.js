@@ -102,7 +102,6 @@ msChartConfig =
         symbolRadius: 5
     },
     type: 'area',
-
     title: {
         text: ''
     },
@@ -123,16 +122,11 @@ msChartConfig =
             text: 'Percent'
         }
     },
-
     plotOptions: {
         area: {
             gapsize: 1,
             stacking: 'percent',
-            //pointPadding: 0,
-            //groupPadding: 0,
-            //fillOpacity: 0.5,
             connectNulls: false,
-            //lineColor: '#ffffff',
             lineWidth: 0,
             marker: {
                 enabled : false,

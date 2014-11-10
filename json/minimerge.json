@@ -11,10 +11,8 @@
             "bool": {
                "must_not": [
                   {
-                     "term": {
-                        "stream": {
-                           "value": "Error"
-                        }
+                     "terms": {
+                        "stream": ["Error","HLTRates","L1Rates"]
                      }
                   },
                   {
@@ -23,7 +21,8 @@
                            "value": "DQM"
                         }
                      }
-                  }
+                  },
+
                ]
             }
       },

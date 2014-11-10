@@ -11,6 +11,7 @@
   "facets": {
     "streams": {
       "terms": {
+        "size":100,
         "field": "stream",
         "order": "term"
       }

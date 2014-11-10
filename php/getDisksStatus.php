@@ -18,7 +18,7 @@ $stringQuery = file_get_contents("../json/".$query.".json");
 
 $jsonQuery = json_decode($stringQuery,true);
 
-$jsonQuery["query"]["bool"]["must"][1]["wildcard"]["activeRuns"]["value"] = "*".$runNumber."*";
+$jsonQuery["query"]["wildcard"]["activeRuns"]["value"] = "*".$runNumber."*";
 
 $stringQuery = json_encode($jsonQuery);
 

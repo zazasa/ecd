@@ -88,7 +88,7 @@ msChartConfig =
         ignoreHiddenSeries : true,
         renderTo : "microstatestime-chart",
         //height: 400,
-        zoomType: 'xy',                    
+        zoomType: 'xy',            
     },
     colors: Colors.colorList(),
     legend: {

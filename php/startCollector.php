@@ -27,17 +27,17 @@ $mapping["dynamic"] = true;
 //deleting old istances
 $riverIndex = "_river/runriver_".$runNumber."/";
 $res=json_decode(esDel($riverIndex), true);
+if ($format=="json"){ echo json_encode($res); }
 
 //put dynamic mapping
 $index = "_river/runriver_".$runNumber."/_mapping";
 $stringQuery = json_encode($mapping);
 $res=json_decode(esPut($stringQuery,$index), true);
+if ($format=="json"){ echo json_encode($res); }
 
 //start collector
 $index = "_river/runriver_".$runNumber."/_meta";
 $stringQuery = json_encode($source);
 $res=json_decode(esPut($stringQuery,$index), true);
-
-
 if ($format=="json"){ echo json_encode($res); }
 ?>

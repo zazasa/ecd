@@ -23,8 +23,8 @@ var runInfo = {
         this.streams = false; this.status = false;
     },
     run : function(){
-        //if(riverStatus.collector.status){$("#runCollecting").fadeToggle(Math.round(runInfo.interval/2))}
-        //    else {$("#runCollecting").fadeOut(Math.round(runInfo.interval/2))}
+        if(riverStatus.collector.status){$("#runCollecting").fadeToggle(Math.round(runInfo.interval/2))}
+            else {$("#runCollecting").fadeOut(Math.round(runInfo.interval/2))}
         if (!this.runNumber){ this.status = "NORUN"; this.running = false; runInfo.updateUi();}
         else {
             //this.timer.stop();
@@ -52,7 +52,7 @@ var runInfo = {
             });
             $.when(dRuninfo,dStreams,dLastLs).then(function(){
                 runInfo.updateUi();
-                //if(riverStatus.collector.status){$("#runCollecting").fadeToggle(Math.round(runInfo.interval/2))}
+                if(riverStatus.collector.status){$("#runCollecting").fadeToggle(Math.round(runInfo.interval/2))}
                 runReady();
             });
         }
@@ -932,9 +932,12 @@ function dumpInfo(ms){
 }
 
 
+function f3mon(){
 
+    setControls();
+    startItAll();
 
-setControls();
-startItAll();
+//dumpInfo(3000);
 
-dumpInfo(3000);
+}
+

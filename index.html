@@ -4,7 +4,7 @@
 
 <title>F3 Mon</title>
 
-<script src="lib/head.js"></script>
+<script src="js/lib/head.js"></script>
 <script>
     head.js("css/bootstrap.min.css")
         .js("css/bootstrap-switch.min.css")
@@ -88,7 +88,7 @@
 <h4 class="panel-title pull-left">Run Info: <span id= "runNumber"></span></h4> 
 
 <div class="btn-group btn-group-xs pull-right">
-<button type="button" class="btn btn-xs btn-primary btn-rec" data-toggle="tooltip" title="Recollect data." ><i class="fa fa-retweet"></i></button>
+<button type="button" class="btn btn-xs btn-primary btn-rec" data-toggle="tooltip" title="Restart data collector." ><i class="fa fa-retweet"></i></button>
 </div>   
 <div class="btn btn-xs btn-info pull-right" style = "display : none " id="runCollecting">Collecting...</div>
 </div>
@@ -157,7 +157,7 @@
   <button type="button" class="btn btn-xs btn-primary btn-sr disabled" >&larr;</button>
   <button type="button" class="btn btn-xs btn-default btn-dd disabled">&rarr;</button>
 </div>                                                    
-<div class="btn btn-xs disabled pull-right" id="logButton">QueryTime: 
+<div class="btn btn-xs disabled pull-right" style="width: 150px" id="logButton">QueryTime: 
 <span class="badge" id="querytime">N/A</span></div> 
 <div class="btn-group btn-group-xs pull-right"> 
 <button class="btn btn-xs btn-primary" id="btn-unit-e"> Events</button>
@@ -309,6 +309,7 @@ It is possible to remove the old data and restart from scratch or continue on th
 <!--INCLUDES-->
 <script>  
     head.js("js/lib/jquery.js") 
+        .js("js/lib/jquery-ui.min.js")
         .js("js/lib/jquery.mousewheel.min.js")
         .js("js/lib/jqallrangesliders.js")
         .js("js/lib/bootstrap.min.js")
@@ -318,7 +319,6 @@ It is possible to remove the old data and restart from scratch or continue on th
         .js("js/lib/Highstock/js/modules/exporting.src.js")
         .js("js/lib/Highstock/js/modules/drilldown.src.js")
         .js("js/lib/Highstock/js/themes/grid-custom.js")
-        .js("js/lib/DataTables/js/jquery-DT-pagination.js")
         .js("js/lib/DataTables/js/jquery.dataTables.js")
         .js("js/lib/DataTables/js/dataTables.bootstrap.custom.js")
         .js("js/lib/date-euro.js")
@@ -329,7 +329,13 @@ It is possible to remove the old data and restart from scratch or continue on th
         .js("js/charts.js")
         .js("js/tables.js")
         .js("js/sliders.js")
-        .js("js/f3mon.js");
+        .js("js/f3mon.js")
+
+        .ready("ALL", function() {
+            console.log("headJS Ready");
+            f3mon();
+        })
+
 </script>  
 
 </body>

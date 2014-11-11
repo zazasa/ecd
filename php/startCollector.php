@@ -20,8 +20,13 @@ $source = $res["hits"]["hits"][0]["_source"];
 if (! $source){die();}
 $source["role"] = "collector";
 $source["runNumber"] = $runNumber;
-var_dump($source);
+$source["startsBy"] = "Web Iterface";
 $mapping["dynamic"] = true;
+//var_dump($source);
+
+//deleting old istances
+$riverIndex = "_river/runriver_".$runNumber."/";
+$res=json_decode(esDel($riverIndex), true);
 
 //put dynamic mapping
 $index = "_river/runriver_".$runNumber."/_mapping";

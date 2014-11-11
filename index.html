@@ -4,33 +4,17 @@
 
 <title>F3 Mon</title>
 
-
-<!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Bootstrap Switch-->
-<link href="css/bootstrap-switch.min.css" rel="stylesheet">
-
-<!-- Swiper-->
-<link href="js/lib/Swiper/src/idangerous.swiper.css" rel="stylesheet">
-
-<!-- http://ghusse.github.io/jQRangeSlider/index.html -->
-<link rel="stylesheet" type="text/css" href="css/iThing-min.css">  
-
-<!-- DataTables CSS 
-<link rel="stylesheet" type="text/css" href="js/lib/DataTables/css/jquery.dataTables.css">
--->
-<link rel="stylesheet" type="text/css" href="js/lib/DataTables/css/dataTables.bootstrap.css">
-
-
-<!-- Custom CSS 
-<link rel="stylesheet" href="css/bootstrap.darkly.css">
-
-<link rel="stylesheet" href="css/bootstrap.cyborg.css">
--->
-<link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" href="css/lavish-bootstrap.css"> 
-<link rel="stylesheet" href="css/custom.css">
+<script src="lib/head.js"></script>
+<script>
+    head.js("css/bootstrap.min.css")
+        .js("css/bootstrap-switch.min.css")
+        .js("js/lib/Swiper/src/idangerous.swiper.css")
+        .js("css/iThing-min.css")
+        .js("js/lib/DataTables/css/dataTables.bootstrap.css")
+        .js("css/font-awesome/css/font-awesome.min.css")
+        .js("css/lavish-bootstrap.css")
+        .js("css/custom.css");
+</script>  
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -38,6 +22,7 @@
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 </head>
 <body>
 
@@ -195,7 +180,6 @@
 -->
 
 
-
 </div>
 <div class="panel-body">
 <div id="streamrates-chart"></div>
@@ -322,57 +306,31 @@ It is possible to remove the old data and restart from scratch or continue on th
 </div> <!--Close confirm dialog-->
 </div> <!--Central Container-->
 
-
-
 <!--INCLUDES-->
-
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="js/lib/jquery.js"></script>
-
-<!-- http://ghusse.github.io/jQRangeSlider/index.html -->
-<script src="js/lib/jquery-ui.min.js"></script>
-<script src="js/lib/jquery.mousewheel.min.js"></script>
-<script src="js/lib/jqallrangesliders.js"></script>
-
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="js/lib/bootstrap.min.js"></script>
-<!-- Bootstrap Switch-->
-<script src="js/lib/bootstrap-switch.min.js"></script>
-
-<!-- Swiper-->
-<script src="js/lib/Swiper/src/idangerous.swiper.js"></script>
-
-<!-- Highcharts 
-
-<script src="http://github.highcharts.com/nosegments/highstock.src.js"></script>
-<script src="js/lib/Highstock/js/themes/dark-unica-custom.js"></script>
-<script src="js/lib/Highstock/js/highstock.src.js"></script>
--->
-<script src="js/lib/Highcharts/js/highcharts.js"></script>
-<script src="js/lib/Highstock/js/modules/exporting.src.js"></script>
-<script src="js/lib/Highstock/js/modules/drilldown.src.js"></script>
-<script src="js/lib/Highstock/js/themes/grid-custom.js"></script>
-
-<!-- DataTables 
-<script src="js/lib/DataTables/js/jquery-DT-pagination.js"></script>
--->
-<script src="js/lib/DataTables/js/jquery.dataTables.js"></script>
-<script src="js/lib/DataTables/js/dataTables.bootstrap.custom.js"></script>
-<script src="js/lib/date-euro.js"></script>
-
-<!-- utility 
-<script src="js/lib/underscore-min.js"></script>
--->
-<script src="js/lib/date.js"></script>
-<script src="js/lib/chroma.min.js"></script>
-
-<!-- f3 main js script, needs jquery.min.js -->
-<script src="js/utils.js"></script>
-<script src="js/charts.js"></script>
-<script src="js/tables.js"></script>
-<script src="js/sliders.js"></script>
-<script src="js/f3mon.js"></script>
-
+<script>  
+    head.js("js/lib/jquery.js") 
+        .js("js/lib/jquery.mousewheel.min.js")
+        .js("js/lib/jqallrangesliders.js")
+        .js("js/lib/bootstrap.min.js")
+        .js("js/lib/bootstrap-switch.min.js")
+        .js("js/lib/Swiper/src/idangerous.swiper.js")
+        .js("js/lib/Highcharts/js/highcharts.js")
+        .js("js/lib/Highstock/js/modules/exporting.src.js")
+        .js("js/lib/Highstock/js/modules/drilldown.src.js")
+        .js("js/lib/Highstock/js/themes/grid-custom.js")
+        .js("js/lib/DataTables/js/jquery-DT-pagination.js")
+        .js("js/lib/DataTables/js/jquery.dataTables.js")
+        .js("js/lib/DataTables/js/dataTables.bootstrap.custom.js")
+        .js("js/lib/date-euro.js")
+        .js("js/lib/date.js")
+        .js("js/lib/chroma.min.js")
+        
+        .js("js/utils.js")
+        .js("js/charts.js")
+        .js("js/tables.js")
+        .js("js/sliders.js")
+        .js("js/f3mon.js");
+</script>  
 
 </body>
 </html>

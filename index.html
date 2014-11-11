@@ -52,9 +52,9 @@
 <ul class="nav navbar-nav navbar-center">
 <li>
 <div class="btn-group">
-<button type="button" class="btn navbar-btn btn-info disabled"><i class="fa fa-database"></i> System:</button>
+<button type="button" class="btn navbar-btn btn-info disabled"><i class="fa fa-database"></i> System: </button>
 <button type="button" class="btn navbar-btn btn-info dropdown-toggle" data-toggle="dropdown">
-<span id="indexname"></span><span class="caret"></span></button>
+<span id="indexname"></span><span class="caret" style="margin-left: 10px"></span></button>
 <ul class="dropdown-menu" role="menu" id = "indexlist"></ul>
 </div>
 </li>
@@ -80,7 +80,7 @@
 <!-- SideBar
 ================================================== -->
 <div class="col-md-3 main-sidebar">
-<div class="panel-group" >
+<div class="panel-group" style="height: auto; width: auto;" >
 
 <!-- RUNINFO PANEL -->
 <div class="panel panel-primary ">
@@ -104,7 +104,7 @@
 
 <!-- DISKSINFO PANEL-->
 <div class="panel panel-primary ">
-<div class="panel-heading"><h4 class="panel-title">Disks Information:</h4></div> 
+<div class="panel-heading"><h4 class="panel-title">Disks Information</h4></div> 
 <div class="panel-body">
 <ul class="list-group">
 <li class="list-group-item">BU Ramdisk: <span id="buramdisk"> </span></li>
@@ -116,12 +116,23 @@
 
 <!-- RUNLIST PANEL-->
 <div class="panel panel-primary ">
-<div class="panel-heading"><h4 class="panel-title"> Run List :
+<div class="panel-heading"><h4 class="panel-title"> Run List 
 <span id= "runListNum" class="label label-primary pull-right">Num runs:</span></h4>
 </div> 
 <div class="panel-body">
 <div id="runListTableWrapper" >
 <table id="runListTable"  class="table table-responsive table-striped table-condensed" cellspacing="0" ></table>
+</div> 
+</div> 
+</div>
+
+<!-- RIVERLIST PANEL-->
+<div class="panel panel-primary ">
+<div class="panel-heading"><h4 class="panel-title"> RunRiver List </h4>
+</div> 
+<div class="panel-body">
+<div id="runRiverListTableWrapper" >
+<table id="runRiverListTable"  class="table table-responsive table-striped table-condensed" cellspacing="0" ></table>
 </div> 
 </div> 
 </div>
@@ -138,7 +149,7 @@
 <!--First Slide-->
 <div class="swiper-slide swiper-no-swiping"> 
 <!-- Any HTML content of the first slide goes here -->
-<div class="panel-group" >
+<div class="panel-group"  style="height: auto; width: auto;">
 
 <!--STREAM RATES PANEL-->
 <div class="panel panel-primary swiper-swiped">
@@ -311,20 +322,24 @@ It is possible to remove the old data and restart from scratch or continue on th
     head.js("js/lib/jquery.js") 
         .js("js/lib/jquery-ui.min.js")
         .js("js/lib/jquery.mousewheel.min.js")
-        .js("js/lib/jqallrangesliders.js")
         .js("js/lib/bootstrap.min.js")
         .js("js/lib/bootstrap-switch.min.js")
         .js("js/lib/Swiper/src/idangerous.swiper.js")
+//jqrangeslider
+        .js("js/lib/jqallrangesliders.js")
+//highcharts
         .js("js/lib/Highcharts/js/highcharts.js")
         .js("js/lib/Highstock/js/modules/exporting.src.js")
         .js("js/lib/Highstock/js/modules/drilldown.src.js")
         .js("js/lib/Highstock/js/themes/grid-custom.js")
+//datatables
         .js("js/lib/DataTables/js/jquery.dataTables.js")
         .js("js/lib/DataTables/js/dataTables.bootstrap.custom.js")
         .js("js/lib/date-euro.js")
         .js("js/lib/date.js")
+//chroma        
         .js("js/lib/chroma.min.js")
-        
+//ecd        
         .js("js/utils.js")
         .js("js/charts.js")
         .js("js/tables.js")

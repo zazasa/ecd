@@ -1,7 +1,12 @@
-buttonString= '<div class="btn-group btn-group-xs row-tools pull-right">';
-buttonString+= '<a role="button" class="btn btn-default btn-xs run-close" data-toggle="tooltip" title="Close data collector."><span class="fa fa-power-off"></span></a>';
-buttonString+= '<a role="button" class="btn btn-default btn-xs run-show" data-toggle="tooltip" title="Display this run."><span class="fa fa-play-circle "></span></a>';
-buttonString+= '</div>'; 
+rlbuttonString= '<div class="btn-group btn-group-xs row-tools pull-right">';
+rlbuttonString+= '<a role="button" class="btn btn-default btn-xs run-show" data-toggle="tooltip" title="Display this run."><span class="fa fa-play-circle "></span></a>';
+rlbuttonString+= '</div>'; 
+
+rrlbuttonString= '<div class="btn-group btn-group-xs row-tools pull-right">';
+rrlbuttonString+= '<a role="button" class="btn btn-default btn-xs run-close" data-toggle="tooltip" title="Close data collector."><span class="fa fa-power-off"></span></a>';
+rrlbuttonString+= '</div>'; 
+
+
 
 runListTable = {
     ajax: "php/runListTable.php",
@@ -31,13 +36,38 @@ runListTable = {
         },
         {   data: 'buttons', title:'', defaultContent:"" , bSortable: false, bSearchable: false,
             fnCreatedCell: function (item, data, row) { 
-                $(item).append(buttonString).find(".row-tools").attr("number",row["runNumber"]);
+                $(item).append(rlbuttonString).find(".row-tools").attr("number",row["runNumber"]);
             }
         }
     ],
     serverParams : function ( aoData ) {
         aoData["sysName"] = runInfo.sysName;
     }
+};
+
+runRiverListTable = {
+    ajax: "php/runRiverListTable.php",
+    serverSide: true,
+    bAutoWidth: false,
+    order: [[ 0, "desc" ]],
+    iDisplayLength: 5,
+    lengthChange: false,
+    info: false,
+    dom: '<lrtip>',    
+    columns: [
+        {   data: 'name', title:'Name', bSortable: false},
+        {   data: 'role', title:'Role', bSortable: false},
+        {   data: 'host', title:'Host', bSortable: false},
+        {   data: 'buttons', title:'', defaultContent:"" , bSortable: false, bSearchable: false,
+            fnCreatedCell: function (item, data, row) { 
+                if (row["role"] == "collector"){
+                    runNumber = row["name"].split("_").pop();
+                    $(item).append(rrlbuttonString).find(".row-tools").attr("number",runNumber);    
+                }
+                
+            }
+        }
+    ]
 };
 
 

@@ -195,6 +195,33 @@ var runList = {
     }
 }
 
+var runRiverList = {  
+    table: false,
+
+    timer : new Timer(),
+    interval : 10000,
+    running: true,
+    
+
+    start : function(){this.running = true; this.run(); },
+    stop : function(){ this.timer.stop(); this.running = false; },
+    run : function(){
+        if (!runRiverList.table){
+            
+            runRiverListTable.initComplete = runRiverList.updateUi;    
+            runRiverList.table = $('#runRiverListTable').dataTable(runRiverListTable);
+        }
+        else {
+            
+            runRiverList.table.api().ajax.reload(runRiverList.updateUi,false);
+        }
+    },
+    updateUi : function(){
+        $('#runRiverListNum').text("Num runs: "+runRiverList.table.fnSettings().fnRecordsTotal());
+        if (runRiverList.running){runRiverList.timer = new Timer(function(){runRiverList.run()},runRiverList.interval)};
+    }
+}
+
 var disksStatus = {
     ramdisk: 0,
     outdisk: 0,
@@ -864,7 +891,7 @@ function setControls(){
         //stopItAll();
     });
 
-    $("#runListTable").on("click", ".run-close",function() {
+    $("#runRiverListTable").on("click", ".run-close",function() {
         
         rn = $(this).closest(".row-tools").attr("number");
         selectedRun = rn;
@@ -900,6 +927,7 @@ function startItAll(){
     runRanger.start();
     riverStatus.start();
     runList.start();
+    runRiverList.start();
     disksStatus.start();
     logTable.start();    
     streamChart.init(); 

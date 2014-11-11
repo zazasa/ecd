@@ -40,7 +40,7 @@ lsChartConfig =
     {
         title: {text: 'Events'},
         id:"rates",
-        height: 260,
+        height: "85%",
         lineWidth: 1,
         offset:0
     },
@@ -48,7 +48,7 @@ lsChartConfig =
        title: {text: 'Completeness %'},
        max : 100,
        min : 0,
-       height: 260,
+       height: "85%",
        opposite : true,
        id: "percent",
        lineWidth: 1,
@@ -59,8 +59,8 @@ lsChartConfig =
        max : 100,
        min : 0,
        id: "mpercent",
-       height: 30,
-       top: 280,
+       height: "10%",
+       top: "90%",
        lineWidth: 1,
        offset:0,
    }],

@@ -56,7 +56,7 @@ runRiverListTable = {
     dom: '<lrtip>',    
     columns: [
         {   data: 'name', title:'Name', bSortable: false},
-        {   data: 'role', title:'Role', bSortable: false},
+        {   data: 'role', title:'Role', bSortable: false, sClass: "alignCenter"},
         {   data: 'host', title:'Host', bSortable: false},
         {   data: 'buttons', title:'', defaultContent:"" , bSortable: false, bSearchable: false,
             fnCreatedCell: function (item, data, row) { 

@@ -11,6 +11,7 @@ lsChartConfig =
         zoomType: 'x',
         events: {},
     },
+//    colors: Colors.colorList(),
     tooltip: {
         followPointer: false
     },
@@ -80,8 +81,9 @@ lsChartConfig =
    plotOptions:{
         series: {
             //minPointLength: 10,
-            groupPadding: 0,
+            groupPadding: 0.01,
             pointPadding: 0,
+            borderWidth: 0.01,
             events: {
                 legendItemClick: function(event) {
                         cSerie = this.chart.get(this.name+"_complete");

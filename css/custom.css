@@ -130,3 +130,6 @@ table.dataTable tbody td {
     font-size: 12px;
     line-height: 1.5;
 }
+
+.alignRight { text-align: right; }
+.alignCenter { text-align: center; }

@@ -284,7 +284,7 @@ var streamChart = {
         this.lsInterval = false;
         this.zoomed= false;
         
-        if (this.timer){timer.stop();}
+        //if (this.timer){timer.stop();}
         this.timer = new Timer();
         this.interval = 5000;
         this.running= false;
@@ -328,6 +328,7 @@ var streamChart = {
         serie = streamChart.chart.get("minimerge");
         if (serie == null){
             serie = streamChart.chart.addSeries({
+                borderWidth     : 0.5,
                 type            : 'column',
                 id              : "minimerge",
                 name            : "minimerge",
@@ -340,6 +341,7 @@ var streamChart = {
         serie = streamChart.chart.get("macromerge");
         if (serie == null){
             serie = streamChart.chart.addSeries({
+                borderWidth     : 0.5,
                 type            : 'column',
                 id              : "macromerge",
                 name            : "macromerge",
@@ -433,7 +435,7 @@ var streamChart = {
             })
     },
     next: function(){
-        if (streamChart.running){streamChart.timer = new Timer(function(){streamChart.run()},streamChart.interval)};      
+        if (streamChart.running){streamChart.timer.stop(); streamChart.timer = new Timer(function(){streamChart.run()},streamChart.interval)};      
     },
     initChart: function(){
         if (this.chart) { this.chart.destroy(); this.chart = false; $("#"+lsChartConfig.chart.renderTo).empty();}

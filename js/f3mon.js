@@ -915,6 +915,10 @@ function setControls(){
     });
 }
 
+function reloader(){
+    window.location.reload();
+};
+
 function runReady(){
     streamChart.start();
     microstatesChart.start();
@@ -961,11 +965,10 @@ function dumpInfo(ms){
 
 
 function f3mon(){
-
     setControls();
     startItAll();
+    window.setInterval(reloader, 60*60*1000);
 
-//dumpInfo(3000);
-
+    //dumpInfo(3000);
 }
 

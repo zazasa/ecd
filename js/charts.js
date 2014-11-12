@@ -12,7 +12,7 @@ lsChartConfig =
         events: {},
     },
     tooltip: {
-        //followPointer: true 
+        followPointer: false
     },
     legend: {
         align: 'center',
@@ -40,33 +40,46 @@ lsChartConfig =
     {
         title: {text: 'Events'},
         id:"rates",
-        height: "85%",
+        height: "74%",
         lineWidth: 1,
-        offset:0
+        offset:0,
     },
     {
        title: {text: 'Completeness %'},
        max : 100,
        min : 0,
-       height: "85%",
+       height: "74%",
        opposite : true,
        id: "percent",
        lineWidth: 1,
-       offset:0
+       offset:0,
    },
    {
-       title: {text: 'Merge %'},
+       title: {text: 'miniMerge %'},
        max : 100,
        min : 0,
-       id: "mpercent",
+       id: "minipercent",
+       height: "10%",
+       top: "79%",
+       lineWidth: 1,
+       offset:0,
+       
+   },
+   {
+       title: {text: 'macroMerge %'},
+       max : 100,
+       min : 0,
+       id: "macropercent",
        height: "10%",
        top: "90%",
        lineWidth: 1,
        offset:0,
-   }],
+       opposite: true,
+   }
+   ],
    plotOptions:{
-
         series: {
+            //minPointLength: 10,
             groupPadding: 0,
             pointPadding: 0,
             events: {
@@ -184,7 +197,7 @@ mChartConfig =
         //borderRadius: 20,
         //borderWidth: 2,
     },
-    tooltip: { followPointer: true },
+    tooltip: { followPointer: false },
     legend: {enabled: false },
     title: { text: '' },
     xAxis: [

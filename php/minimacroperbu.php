@@ -15,6 +15,9 @@ if(!isset($_GET["sysName"])) $sysName = "cdaq";
     else $sysName = $_GET["sysName"];
 if(!isset($_GET["streamList"])) $streamList = array("a","b");
     else $streamList = $_GET["streamList"]; 
+if(!isset($_GET["type"])) $type = "minimerge";
+    else $type = $_GET["type"];
+
 
 
 //GET TOTAL
@@ -51,10 +54,10 @@ foreach($docs as $doc) {
 //die(var_dump($totals));
 
 
-//GET MINIMERGE
+//GET MINI OR MACRO MERGE
 
-$index = "runindex_".$sysName."_read/minimerge"; 
-$query = "miniperbu.json";
+$index = "runindex_".$sysName."_read/".$type; 
+$query = "minimacroperbu.json";
 
 $stringQuery = file_get_contents("../json/".$query);
 
@@ -91,7 +94,7 @@ $out = array("percents"=>array());
 
 foreach ($totals as $bu => $total){
     $processed = $totalProc[$bu];
-    //CALC MINIMERGE PERCENTS        
+    //CALC PERCENTS        
     
     if ($total == 0){ $percent = 100;} 
         else{ $percent = round($processed/$total*100,2);  }

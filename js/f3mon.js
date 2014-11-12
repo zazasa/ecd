@@ -264,6 +264,7 @@ var streamChart = {
     slider : false,
     chart : false,
     mchart : false,
+    timer : false,
     init : function(){
 
         this.updateUnit = true;
@@ -276,12 +277,14 @@ var streamChart = {
         this.maxLs= false;
         this.mMinLs= false;
         this.mMaxLs= false;
+        this.mType= false;
         this.mTitle= false;
         this.mmTitle= false;
         this.unit= "Events"; //Events; Bytes
         this.lsInterval = false;
         this.zoomed= false;
-    
+        
+        if (this.timer){timer.stop();}
         this.timer = new Timer();
         this.interval = 5000;
         this.running= false;
@@ -328,9 +331,21 @@ var streamChart = {
                 type            : 'column',
                 id              : "minimerge",
                 name            : "minimerge",
-                yAxis           : "mpercent",
+                yAxis           : "minipercent",
                 showInLegend    : false,
-                point           : {"events":{"click": streamChart.mDrillDown}},
+                point           : {"events":{"click": streamChart.miniDrillDown}},
+                cursor          : "pointer"
+            });
+        }
+        serie = streamChart.chart.get("macromerge");
+        if (serie == null){
+            serie = streamChart.chart.addSeries({
+                type            : 'column',
+                id              : "macromerge",
+                name            : "macromerge",
+                yAxis           : "macropercent",
+                showInLegend    : false,
+                point           : {"events":{"click": streamChart.macroDrillDown}},
                 cursor          : "pointer"
             });
         }
@@ -380,13 +395,16 @@ var streamChart = {
 
                     streamList = j.streamList;
                     took = j.took;
-                    mmdata = j.minimerge;
+                    minimergeData = j.minimerge;
+                    macromergeData = j.macromerge;
                     lsList = j.lsList;
 
                     streamChart.lsInterval = j.interval;
 
                     serie = streamChart.chart.get("minimerge");
-                    serie.setData(mmdata.percents,false,false,false);
+                    serie.setData(minimergeData.percents,false,false,false);
+                    serie = streamChart.chart.get("macromerge");
+                    serie.setData(macromergeData.percents,false,false,false);
 
                     streamList.forEach(function(stream){
                         streamData = j.streams[stream]
@@ -420,7 +438,7 @@ var streamChart = {
     initChart: function(){
         if (this.chart) { this.chart.destroy(); this.chart = false; $("#"+lsChartConfig.chart.renderTo).empty();}
         lsChartConfig.chart.events.selection = streamChart.selection;
-        //lsChartConfig.chart.events.drilldown = streamChart.mmDrillDown;
+        lsChartConfig.chart.events.click = streamChart.backGroundClick;
         this.chart = new Highcharts.Chart(lsChartConfig);
         this.chart.showLoading(WAITINGCHART);
     },
@@ -458,7 +476,7 @@ var streamChart = {
         };
     },
     disableDrillDown : function(){
-        if (streamChart.mchart) { streamChart.mchart.destroy(); streamChart.mchart = false; $("#"+mChartConfig.chart.renderTo).empty();}
+        if (streamChart.mchart) { streamChart.mchart.destroy(); streamChart.mchart = false; $("#"+mChartConfig.chart.renderTo).empty().unbind();}
         streamChart.selectSR();
         if (!$(".btn-sr,.btn-dd").hasClass("disabled")) {$(".btn-sr,.btn-dd").addClass('disabled') };
 
@@ -475,18 +493,72 @@ var streamChart = {
         $(".btn-sr").removeClass('btn-primary').addClass('btn-default');
         mySwiper2.swipeTo(1);
     },
-    mmDrillUp : function(){
+    mmDrillUp : function(){ //Drillup from second to first drilldown
         $("#ddtitle").text(streamChart.mTitle);
     },
-    mmDrillDown : function(event){    //second level drill down
+    backGroundClick : function(event){
+        xRawValue = Math.round(Math.abs(event.xAxis[0].value));
+        xRealValue = event.xAxis[0].axis.categories[xRawValue];
+        event.point = {name:xRealValue};
+
+        y2RawValue = Math.ceil(event.yAxis[2].value);
+        y3RawValue = Math.ceil(event.yAxis[3].value);
+
+        if(y3RawValue < 100){streamChart.mType = "macromerge"}
+            else if (y2RawValue<100){streamChart.mType = "minimerge"}
+                else {streamChart.mType = false}
+        streamChart.firstDrillDown(event);                
+        //console.log(event);
+        //console.log(event.xAxis[0].value,xRawValue,xRealValue,y2RawValue,y3RawValue,streamChart.mType);
+    },
+    miniDrillDown : function(event){streamChart.mType="minimerge"; streamChart.firstDrillDown(event);},
+    macroDrillDown : function(event){streamChart.mType="macromerge"; streamChart.firstDrillDown(event);},
+    firstDrillDown : function(event){   //first level drill down
+
+        streamChart.mMinLs = event.point.name;
+        if (streamChart.lsInterval == 1) { streamChart.mMaxLs = streamChart.mMinLs }
+            else {streamChart.mMaxLs = event.point.name + streamChart.lsInterval;}
+        
+        $.when(  $.getJSON('php/minimacroperstream.php?',
+            {
+                runNumber   : runInfo.runNumber,
+                from        : streamChart.mMinLs,
+                to          : streamChart.mMaxLs,
+                sysName     : runInfo.sysName,
+                streamList  : runInfo.streams,
+                type        : streamChart.mType,
+            })).done(function(j){
+                if (streamChart.mchart) { streamChart.mchart.destroy(); streamChart.mchart = false; $("#"+mChartConfig.chart.renderTo).empty();}
+                if (streamChart.mType=="minimerge"){
+                    mChartConfig.chart.events.drilldown = streamChart.secondDrillDown;
+                    mChartConfig.chart.events.drillup = streamChart.mmDrillUp;    
+                } else{
+                    mChartConfig.chart.events.drilldown = false;
+                    mChartConfig.chart.events.drillup = false;    
+                }
+                streamChart.mchart = new Highcharts.Chart(mChartConfig);
+                serie = streamChart.mchart.addSeries({
+                        type    : 'column',
+                        id      : "drilldown",
+                        name    : "drilldown",
+                        yAxis   : "percent",
+                        data    : j.percents,
+                });
+                streamChart.mTitle = " "+streamChart.mType+", LS Range: "+streamChart.mMinLs.toString()+" - "+streamChart.mMaxLs.toString();
+                $("#ddtitle").text(streamChart.mTitle);
+                streamChart.selectDD();
+            })
+    },
+    secondDrillDown : function(event){    //second level drill down
         stream = event.point.name;
-        $.when(  $.getJSON('php/miniperbu.php?',
+        $.when(  $.getJSON('php/minimacroperbu.php?',
             {
                 runNumber   : runInfo.runNumber,
                 from        : streamChart.mMinLs,
                 to          : streamChart.mMaxLs,
                 sysName     : runInfo.sysName,
                 stream      : stream,
+                type        : streamChart.mType,
             })).done(function(j){
                 serie = streamChart.mchart.addSeriesAsDrilldown(event.point, { 
                     type    : 'column',
@@ -495,44 +567,12 @@ var streamChart = {
                     yAxis   : "percent",
                     data    : j.percents,
                 });
-                streamChart.mmTitle = " Stream: "+stream+" || LS Range: "+streamChart.mMinLs.toString()+" - "+streamChart.mMaxLs.toString();
+                streamChart.mmTitle = " "+streamChart.mType+", Stream: "+stream+" || LS Range: "+streamChart.mMinLs.toString()+" - "+streamChart.mMaxLs.toString();
                 $("#ddtitle").text(streamChart.mmTitle);
             })
     },
-    mDrillDown : function(event){   //first level drill down
 
-        streamChart.mMinLs = event.point.name;
-        if (streamChart.lsInterval == 1) { streamChart.mMaxLs = streamChart.mMinLs }
-            else {streamChart.mMaxLs = event.point.name + streamChart.lsInterval;}
-        
-        $.when(  $.getJSON('php/miniperstream.php?',
-            {
-                runNumber   : runInfo.runNumber,
-                from        : streamChart.mMinLs,
-                to          : streamChart.mMaxLs,
-                sysName     : runInfo.sysName,
-                streamList  : runInfo.streams,
-            })).done(function(j){
-                if (streamChart.mchart) { streamChart.mchart.destroy(); streamChart.mchart = false; $("#"+mChartConfig.chart.renderTo).empty();}
-                mChartConfig.chart.events.drilldown = streamChart.mmDrillDown;
-                mChartConfig.chart.events.drillup = streamChart.mmDrillUp;
-                streamChart.mchart = new Highcharts.Chart(mChartConfig);
-                serie = streamChart.mchart.addSeries({
-                        type    : 'column',
-                        id      : "drilldown",
-                        name    : "drilldown",
-                        yAxis   : "percent",
-                        data    : j.percents,
-
-                });
-                streamChart.mTitle = " LS Range: "+streamChart.mMinLs.toString()+" - "+streamChart.mMaxLs.toString();
-                $("#ddtitle").text(streamChart.mTitle);
-                streamChart.selectDD();
-            })
-    },
     selection : function(event){          
-
-
         if (event.xAxis) {
             event.preventDefault();
             var xAxis = event.xAxis[0];
@@ -967,7 +1007,8 @@ function dumpInfo(ms){
 function f3mon(){
     setControls();
     startItAll();
-    window.setInterval(reloader, 60*60*1000);
+
+    setTimeout(function(){reloader();},60*60*1000);
 
     //dumpInfo(3000);
 }

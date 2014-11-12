@@ -148,12 +148,20 @@ foreach($streams as $stream) {
 }
 $streamOut = $ret;
 
+//Filter DQM from streamlist
+$mmStreamList = array();
+foreach ($streamList as $stream){
+    if (!startsWith($stream,"DQM")){
+        $mmStreamList[] = $stream;
+    }
+}
+$streamNum = count($mmStreamList);
 
 
 //GET MINIMERGE
 
 $index = "runindex_".$sysName."_read/minimerge"; 
-$query = "minimerge.json";
+$query = "minimacromerge.json";
 
 $stringQuery = file_get_contents("../json/".$query);
 
@@ -177,17 +185,8 @@ $res=json_decode(esQuery($stringQuery,$index), true);
 $minimerge = array(
     "percents" => array()
 );
-$mmStreamList = array();
-foreach ($streamList as $stream){
-    if (!startsWith($stream,"DQM")){
-        $mmStreamList[] = $stream;
-    }
-}
-
-
 $took = $took + $res["took"];
-$minimerge["took"] = $took;
-$streamNum = count($mmStreamList);
+$minimerge["took"] = $res["took"];
 
 $lsList = $res["aggregations"]["inrange"]["ls"]["buckets"];
 foreach ($lsList as $item ) {
@@ -209,7 +208,55 @@ foreach ($lsList as $item ) {
     $minimerge["percents"][] =  array("name"=>$ls,"y"=>$percent,"color"=>$color);
 }
 
+
+//GET MACROMERGE
+
+$index = "runindex_".$sysName."_read/macromerge"; 
+$query = "minimacromerge.json";
+
+$stringQuery = file_get_contents("../json/".$query);
+
+$jsonQuery = json_decode($stringQuery,true);
+
+$jsonQuery["query"]["filtered"]["filter"]["and"]["filters"][0]["prefix"]["_id"] = "run".$runNumber;
+$jsonQuery["aggs"]["inrange"]["filter"]["range"]["ls"]["from"]= $from;
+$jsonQuery["aggs"]["inrange"]["filter"]["range"]["ls"]["to"]= $to;
+$jsonQuery["aggs"]["inrange"]["aggs"]["ls"]["histogram"]["extended_bounds"]["min"]= $from;
+$jsonQuery["aggs"]["inrange"]["aggs"]["ls"]["histogram"]["extended_bounds"]["max"]= $to;
+$jsonQuery["aggs"]["inrange"]["aggs"]["ls"]["histogram"]["interval"]= intval($interval);
+
+$stringQuery = json_encode($jsonQuery);
+
+$res=json_decode(esQuery($stringQuery,$index), true);
+
+$macromerge = array(
+    "percents" => array()
+);
+
+$took = $took + $res["took"];
+$macromerge["took"] = $res["took"];
+
+$lsList = $res["aggregations"]["inrange"]["ls"]["buckets"];
+foreach ($lsList as $item ) {
+    $ls = $item["key"];
+    $processed = $item["processed"]["value"];
+    $total = $streamTotals["events"][$ls] * $streamNum ;
+    $doc_count = $streamTotals["doc_counts"][$ls];
+    $mdoc_count = $item["doc_counts"];
+
+//CALC macromerge PERCENTS        
+    if ($total == 0){ 
+        if ($doc_count == 0 || $mdoc_count == 0) {$percent = 0;} 
+        else {$percent = 100; }
+    }
+    else{ $percent = round($processed/$total*100,2);  }
+   
+    $color = percColor($percent);
+    $macromerge["percents"][] =  array("name"=>$ls,"y"=>$percent,"color"=>$color);
+}
+
 $streamOut["minimerge"] = $minimerge;
+$streamOut["macromerge"] = $macromerge;
 $streamOut["took"] = $took;
 $streamOut["interval"] = $interval;
 if ($format=="json"){ echo json_encode($streamOut); }

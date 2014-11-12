@@ -13,7 +13,8 @@ if(!isset($_GET["sysName"])) $sysName = "cdaq";
     else $sysName = $_GET["sysName"];
 if(!isset($_GET["streamList"])) $streamList = array("a","b");
     else $streamList = $_GET["streamList"]; 
-
+if(!isset($_GET["type"])) $type = "minimerge";
+    else $type = $_GET["type"];
 
 $streamNum = count($streamList);
 
@@ -45,8 +46,8 @@ $doc_count = $res["aggregations"]["hits"]["total"];
 
 //GET MINIMERGE
 
-$index = "runindex_".$sysName."_read/minimerge"; 
-$query = "miniperstream.json";
+$index = "runindex_".$sysName."_read/".$type; 
+$query = "minimacroperstream.json";
 
 
 $stringQuery = file_get_contents("../json/".$query);

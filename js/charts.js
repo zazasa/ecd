@@ -61,7 +61,7 @@ lsChartConfig =
        min : 0,
        id: "minipercent",
        height: "10%",
-       top: "79%",
+       top: "78%",
        lineWidth: 1,
        offset:0,
        

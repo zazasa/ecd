@@ -56,7 +56,7 @@ $jsonQuery = json_decode($stringQuery,true);
 $jsonQuery["query"]["bool"]["must"][1]["prefix"]["_id"] = "run".$runNumber;
 $jsonQuery["query"]["bool"]["must"][0]["range"]["ls"]["from"]= $from;
 $jsonQuery["query"]["bool"]["must"][0]["range"]["ls"]["to"]= $to;
-$jsonQuery["aggs"]["stream"]["terms"]["size"] = $streamNum+1;
+//$jsonQuery["aggs"]["stream"]["terms"]["size"] = $streamNum+1;
 
 $stringQuery = json_encode($jsonQuery);
 //var_dump($stringQuery);

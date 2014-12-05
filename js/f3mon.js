@@ -1,4 +1,5 @@
 var selectedRun;
+var selectedIndex;
 
 var runInfo = {
     runNumber : false,
@@ -305,7 +306,7 @@ var streamChart = {
         this.run(); 
     },
     stop : function(){ 
-        this.timer.stop(); 
+        if (this.timer){this.timer.stop()}; 
         this.running = false; 
         this.zoomed= false;
         this.disableDrillDown();
@@ -701,7 +702,7 @@ var microstatesChart = {
         this.run(); 
     },
     stop : function(){ 
-        this.timer.stop(); 
+        if (this.timer){this.timer.stop()}; 
         this.running = false;
         this.status = "off"; 
         this.lastTime = 0;
@@ -812,23 +813,6 @@ var logTable = {
     }
 }
 
-function getIndices(){
-    $.when($.getJSON('php/getIndices.php'))
-    .then(function(j){
-        runInfo.indexList = j;
-        sysList = Object.keys(j);
-        sysList.forEach(function(item){
-            $("#indexlist").append('<li><a href="#">'+item+'</a></li>');
-        })
-        if (sysList.indexOf(DEFAULTINDEX) >= 0){defIndex = DEFAULTINDEX }
-            else {defIndex = sysList[0]}
-      
-        runInfo.sysName = defIndex;
-        $("#indexname").text(defIndex);
-
-    })
-}
-
 function setControls(){
 
     $('#srdivisorcb').change(function() {
@@ -878,7 +862,9 @@ function setControls(){
         runInfo.sysName = $(this).find("a").text();
         runInfo.indexName = runInfo.indexList[runInfo.sysName];
         $("#indexname").text(runInfo.sysName);
-        
+        changeRun(false);
+        runList.stop();
+        runList.start();
     })
 
     mySwiper = $('.swiper-main').swiper({
@@ -958,7 +944,9 @@ function setControls(){
 }
 
 function reloader(){
-    window.location.reload();
+    window.location.href = "#"+runInfo.sysName;
+    if (runInfo.runNumber){window.location.href+=","+runInfo.runNumber}
+    window.location.reload(true);
 };
 
 function runReady(){
@@ -968,7 +956,7 @@ function runReady(){
 };
 
 function startItAll(){
-    getIndices();
+
     runInfo.start();   
     runRanger.start();
     riverStatus.start();
@@ -1005,11 +993,39 @@ function dumpInfo(ms){
     window.t = new Timer(function(){dumpInfo(ms)},ms);   
 }
 
+function getIndices(){
+    $.when($.getJSON('php/getIndices.php'))
+    .then(function(j){
+        runInfo.indexList = j;
+        sysList = Object.keys(j);
+        sysList.forEach(function(item){
+            $("#indexlist").append('<li><a href="#">'+item+'</a></li>');
+        })
+        if (sysList.indexOf(selectedIndex) >= 0){defIndex = selectedIndex }
+            else {defIndex = sysList[0]}
+      
+        runInfo.sysName = defIndex;
+        $("#indexname").text(defIndex);
+        startItAll();
+    })
+}
+
+function checkHash(){
+    selectedIndex = DEFAULTINDEX;
+    selectedRun = false;
+
+    if(window.location.hash) {
+        values = window.location.hash.substring(1).split(',');
+        selectedIndex = values[0];
+        if (values.length > 1){selectedRun = values[1]; }
+    }
+}
 
 function f3mon(){
     setControls();
-    startItAll();
-
+    checkHash();
+    if(selectedRun){runInfo.runNumber=selectedRun}
+    getIndices();
     setTimeout(function(){reloader();},60*60*1000);
 
     //dumpInfo(3000);

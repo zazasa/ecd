@@ -79,7 +79,7 @@ foreach ($streams as $item ) {
 
 //CALC MINIMERGE PERCENTS        
     if ($total == 0){ 
-        if ($doc_count == 0) {$percent = 100;} 
+        if ($doc_count == 0) {$percent = 0;} 
         else {$percent = 100; }
     }
     else{ $percent = round($processed/$total*100,2);  }

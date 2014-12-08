@@ -863,6 +863,7 @@ function setControls(){
         runInfo.indexName = runInfo.indexList[runInfo.sysName];
         $("#indexname").text(runInfo.sysName);
         changeRun(false);
+        window.location.href = "#"+runInfo.sysName;
         runList.stop();
         runList.start();
     })
@@ -971,6 +972,7 @@ function startItAll(){
 };
 
 function changeRun(runNumber){
+    if (runNumber){window.location.href = "#"+runInfo.sysName+","+runNumber}
 
     runInfo.stop();
     riverStatus.stop()
@@ -999,7 +1001,7 @@ function getIndices(){
         runInfo.indexList = j;
         sysList = Object.keys(j);
         sysList.forEach(function(item){
-            $("#indexlist").append('<li><a href="#">'+item+'</a></li>');
+            $("#indexlist").append('<li><a>'+item+'</a></li>');
         })
         if (sysList.indexOf(selectedIndex) >= 0){defIndex = selectedIndex }
             else {defIndex = sysList[0]}

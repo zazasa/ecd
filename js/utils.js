@@ -1,7 +1,7 @@
 var NASTRING = "N/A";
 var WAITINGCHART = "No monitoring information.";
 var NODATACHART = "No monitoring information.";
-var DEFAULTINDEX = "cdaq";
+var DEFAULTINDEX = "minidaq";
 
 
 Colors = {};

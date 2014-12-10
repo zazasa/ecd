@@ -1,0 +1,285 @@
+:title: F3 Monitor Page Tutorial
+:author: Salvatore Zaza
+:description: F3 Monitor Page Tutorial
+:css: css/custom.css
+
+
+The title set is the title that is going to be shown in the title bar of the
+browser. reStructuredText also have a separete syntax for titles that is also
+supported by Hovercraft::
+
+    .. title:: F3 Monitor Tutorial
+
+However that requires an empty line after it, and it looks better to use the
+same syntax for all metadata.
+
+The :css: field will add a custom CSS-file to this presentation. This is
+something you almost always want to do, as you otherwise have no control over
+how the presentation will look. You can also specify different media for
+the CSS, for example "screen,projection"::
+
+    :css-screen,projection: hovercraft.css
+
+----
+
+The F3 Monitor Page
+=====================
+
+.. image:: images/f3mon-main.png
+    :width: 800px
+    :height: 600px
+
+----
+
+:data-x: 0
+:data-y: 0
+:data-z: 0
+
+.. container:: popup
+    :name: popup1
+
+    This guide will introduce you to the comprehension of the **F3 monitor page**.
+
+----
+
+:data-x: r0
+:data-y: r0
+:data-z: r0
+
+.. container:: popup
+    :name: popup2
+
+    But first a step *behind*.
+
+----
+
+:data-x: r0
+:data-y: r0
+:data-z: -2000
+
+CMS DAQ Upgrade (DAQ2)
+======================
+
+.. image:: images/cms-daq-upgrade.png
+    :width: 800px
+    :height: 600px
+
+----
+
+:data-x: r0
+:data-y: r0
+:data-z: -2000
+
+.. container:: popup
+    :name: popup3
+
+    This is the **CMS DAQ Upgrade**. You should already know it.
+
+----
+
+
+:data-x: r0
+:data-y: r0
+:data-z: -2000
+
+.. container:: popup
+    :name: popup4
+
+    So We can now focus on the part where the **F3 Monitor data** are generated.
+
+----
+
+
+:data-x: r-150
+:data-y: r200
+:data-z: -2000
+:data-scale: 0.4
+
+.. container:: popup
+    :name: popup5
+
+    The HLT sub-farms.
+
+----
+
+
+:data-x: r0
+:data-y: r500
+:data-z: -2000
+
+
+The HLT sub-farms
+==================
+
+.. image:: images/hlt-subfarm2.png  
+    :align: left
+
+
+----
+
+:data-x: r0
+:data-y: r0
+:data-z: -2000
+
+
+.. container:: popup
+    :name: popup6
+    
+    When data flows throught the **BU-FU appliance**,the processes involved generate **json** file with information about the merging.
+
+----
+
+.. container:: popup
+    :name: popup7
+       
+    Each PC involved contains an **ElasticSearch** server who collect this json files.    
+
+----
+
+.. container:: popup
+    :name: popup8
+       
+    | We have a set of server for each **BU-FU appliance** wich forms an **ES Cluster**. 
+    | So We have an ES cluster for each appliance.
+
+----
+
+:data-x: r1000
+:data-y: r0
+:data-z: -2000
+
+
+The ES Tribe
+==================
+
+.. image:: images/hlt-subfarm2.png  
+    :align: left
+
+----
+
+:data-x: r0
+:data-y: r0
+:data-z: -2000
+
+
+.. container:: popup
+    :name: popup9
+    
+    To connect all this ES cluster togheter there are some special ES server called **tribe node**.
+
+
+----
+
+.. container:: popup
+    :name: popup10
+    
+    | Basically setting up a **ES Tribe**. 
+    | In this way, each **query** performed on a tribe node will be propagated over all the BU-FU clusters.
+
+
+----
+
+.. container:: popup
+    :name: popup11
+    
+    | But we dont want to stress the BU-FU servers with query coming from the Web Interface requests.
+    | Also, we want to collect the clusters data providing global informations.
+
+
+----
+
+:data-x: r0
+:data-y: r0
+:data-z: -1500
+
+
+The ES-CDAQ cluster
+====================
+
+.. image:: images/hlt-subfarm2.png  
+    :align: left
+
+.. container:: popup
+    :name: popup12
+
+    | So, on top of this we create another ES cluster, called **es-cdaq**.    
+       
+
+----
+
+:id: arrow-slide
+
+:data-scale: 1
+:data-rotate-y: -45
+:data-x: r-150
+:data-z: -1750
+
+
+
+.. container:: popup
+    :name: popup13
+    
+    | To collect data from the **es-tribe** and put them in the **es-cdaq** there is an ES resident software called **RunRiver Plugin**.
+
+.. image:: images/arrow.gif
+    :width: 216px
+    :height: 66px
+
+----
+
+:data-x: r0
+:data-z: -1750
+
+
+.. container:: popup
+    :name: popup14
+    
+    The RunRiver plugin is composed in two part: 
+    
+    * A RunRanger (role:main) who check when a new run starts
+    * A Collector (role:collector) for each run ongoing  who collect the data (triggered by the RunRanger)
+
+
+
+----
+
+:data-x: 0
+:data-y: 0
+:data-z: 0
+:data-rotate-y: 0
+
+.. container:: popup
+    :name: popup15
+
+    Now we can focus on the F3 web page.
+
+----
+
+:data-x: r0
+:data-y: r0
+
+
+.. container:: popup
+    :name: popup16
+
+    Let's see  all its components , one by one.
+
+----
+
+:id: navbar
+:data-x: r0
+:data-y: r-500
+
+.. image:: images/f3mon-navbar.png
+
+----
+
+:data-x: 0
+:data-y: 0
+:data-rotate-y: 0
+:data-z: 2000
+
+That's all for now
+==================
+
+*Have fun!*

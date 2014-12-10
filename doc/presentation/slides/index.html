@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>F3 Monitor Page Tutorial</title>
+    <meta name="author" content="Salvatore Zaza"></meta>
+    <meta name="description" content="F3 Monitor Page Tutorial"></meta>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0, user-scalable=yes" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    
+    
+    <link href="css/animation.css" rel="stylesheet" type="text/css" />
+    <link href="css/basic-animations.css" rel="stylesheet" type="text/css" />
+    <link href="css/custom.css" rel="stylesheet" type="text/css" />
+
+
+    <script type="text/javascript" src="js/jquery.min.js"></script>    
+    <script type="text/javascript" src="js/jmpress.js"></script>    
+    <script type="text/javascript" src="js/duration.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('#jmpress').jmpress();
+        });
+    </script>
+
+</head>
+
+<body >
+    <div id="jmpress">
+        
+        <div class="step" data-x="0" data-y="0" id="f3mon">
+            <h1 id="the-f3-monitor-page">The F3 Monitor Page</h1>
+            <img src="images/f3mon-main.png" alt="" width="800px" height="600px"></img>
+            <div class="footer" data-jmpress="fade after 500 step">
+                <p>This guide will introduce you to the comprehension of the <strong>F3 monitor page</strong>.</p>
+            </div>
+            <div class="footer" data-jmpress="fade" >
+                <p>But first a step <em>behind</em>.</p>                
+            </div>
+        </div>
+        
+        <div class="step" data-x="0" data-y="0" data-z="-2000">
+            <h1 id="cms-daq-upgrade-daq2">CMS DAQ Upgrade (DAQ2)</h1>
+            <img src="images/cms-daq-upgrade.png" alt="" width="800px" height="600px"></img>
+            <div class="footer" data-jmpress="fade after 500 step">
+                <p>This is the <strong>CMS DAQ Upgrade</strong>. You should already know it.</p>
+            </div>
+            <div class="footer" data-jmpress="fade">
+                <p>So We can now focus on the part where the <strong>F3 Monitor data</strong> are generated.</p>
+            </div>
+        </div>
+        
+        <div class="step" data-x="-150" data-y="200" data-z="-2000" data-scale="0.4" id="item">
+            <div class="footer" data-jmpress="fade after 500 step">
+                <p>The HLT sub-farms.</p>
+            </div>
+        </div>
+        
+        <div class="step" data-x="-150" data-y="700" data-z="-2000" data-scale="0.4">
+            <h1 id="the-hlt-sub-farms">The HLT sub-farms</h1>
+            <img src="images/hlt-subfarm2.png" alt="" width="800px" height="600px"></img>
+            <div class="footer" data-jmpress="fade after 500 step">
+                <p>When data flows throught the <strong>BU-FU appliance</strong>,the processes involved generate <strong>json</strong> file with information about the merging.</p>
+            </div>
+            <div class="footer" data-jmpress="fade">
+                <p>Each PC involved contains an <strong>ElasticSearch</strong> server who collect this json files.</p>
+            </div>
+            <div class="footer" data-jmpress="fade">
+                <p>We have a set of server for each <strong>BU-FU appliance</strong> wich forms an <strong>ES Cluster</strong>.
+            </div>
+            <div class="footer" data-jmpress="fade">
+                <p>So We have an ES cluster for each appliance.</p>
+            </div>
+        </div>
+
+        <div class="step" data-x="850" data-y="700" data-z="-2000" data-scale="0.4">
+            <h1 id="the-es-tribe">The ES Tribe</h1>
+            <img src="images/hlt-subfarm2.png" alt="" width="800px" height="600px"></img>
+            <div class="footer" data-jmpress="fade after 500 step" >
+                <p>To connect all this ES cluster togheter there are some special ES server called <strong>tribe node</strong>.</p>
+            </div>
+            <div class="footer" data-jmpress="fade" >
+                <p>Basically setting up a <strong>ES Tribe</strong> each <strong>query</strong> performed on a tribe node will be propagated over all the BU-FU clusters.</p>
+            </div>
+            <div class="footer" data-jmpress="fade">
+               <p>But we dont want to stress the BU-FU servers with query coming from the Web Interface requests.
+               <br>Also, we want to collect the clusters data providing global informations.</p>
+            </div>
+            <div class="footer" data-jmpress="fade" >
+                <p>So, on top of this we create another ES cluster, called <strong>es-cdaq</strong>.</p>
+            </div>
+        </div>
+
+        <div class="step" data-x="850" data-y="700" data-z="-1500" data-scale="0.4" id="es-cdaq-cluster">
+            <h1 id="the-es-cdaq-cluster">The ES-CDAQ cluster</h1>
+            <img src="images/hlt-subfarm2.png" alt="" width="800px" height="600px"></img>
+        </div>
+
+        <div class="step" data-duration="1000" data-scale="0.8" data-rotate-y="-90" data-x="850" data-z="-1750" data-y="700">
+            <img data-jmpress="shot after 500 step" src="images/arrow.gif" width="216px" height="66px" id="arrow-img"></img>
+        </div>
+
+        <div class="step" data-prev="#es-cdaq-cluster" data-scale="0.8" data-rotate-y="-45" data-x="900" data-z="-1750" data-y="700" >
+            <div class="footer" data-jmpress="fade after 500 step" id="#item">
+                <p>To collect data from the <strong>es-tribe</strong> and put them in the <strong>es-cdaq</strong> there is an ES resident software called <strong>RunRiver Plugin</strong>.</p>
+            </div>
+            <div class="footer" data-jmpress="fade">
+                <p>The RunRiver plugin is composed in two part:</p>
+                <ul>
+                    <li>A RunRanger (role:main) who check when a new run starts</li>
+                    <li>A Collector (role:collector) for each run ongoing who collect the data (triggered by the RunRanger)</li>
+                </ul>
+            </div>
+        </div>            
+
+        <div class="step" data-x="0" data-y="0">
+            <div class="footer" data-jmpress="fade after 1000 step">
+                <p> Now we can focus on the F3 web page. </p>
+            </div>
+           <div class="footer" data-jmpress="fade">
+                <p>Let's see all its components , one by one.</p>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+
+</html>

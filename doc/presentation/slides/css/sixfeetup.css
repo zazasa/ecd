@@ -1,0 +1,107 @@
+body {
+    font-family: Verdana, Arial, serif;
+    margin: 0;
+}
+#impress,
+#impress > div {
+    width: 100%;
+}
+a,
+a:visited {
+    color: #64BBDB;
+}
+#footer {
+    position: fixed;
+    bottom: 0;
+    background: #494949;
+    color: #ffffff;
+    width: 96%;
+    padding: 5px 2%;
+}
+#footer img {
+    display: none;
+    float: right;
+}
+#footer .print {
+    display: none;
+}
+#footer p {
+    margin: 8px 0 0 0;
+}
+#footer.disabled {
+    display: none;
+}
+.step {
+    font-size: 28px;
+    color: #333333;
+    width: 70%;
+    
+}
+h1 {
+    color: #296177;
+}
+h2 {
+    color: #64BBDB;
+}
+pre {
+    padding: 20px;
+    color: #ffffff;
+    font-size: 0.65em;
+    line-height: 1.2em;
+}
+tt {
+    color: #208F9E;
+}
+ul li {
+    padding-left: 5px;
+}
+dt {
+    font-weight: bold;
+}
+table {
+    width: 100%;
+}
+th {
+    border-bottom: 2px solid #000000;
+}
+th, td {
+    padding: 5px 15px;
+    text-align: left;
+}
+td p,
+th p {
+    margin: 0;
+}
+
+/* title slide */
+#step-1 {
+    text-align: center;
+}
+
+/* for mobile browsers and others that don't support CSS 3D transforms */
+.impress-not-supported #impress,
+.impress-not-supported #impress > div {
+    position: static !important;
+    margin: 100px 0;
+    width: auto !important;
+}
+.impress-not-supported .step {
+    padding: 5%;
+    border-bottom: 2px solid #cccccc;
+    width: 90% !important;
+}
+.impress-not-supported #hovercraft-help {
+    display: none;
+}
+.impress-not-supported #footer {
+    font-size: 15px;
+}
+
+@media screen and (max-width: 500px) {
+    .step {
+        width: 200%;
+    }
+}
+
+
+

@@ -1,0 +1,92 @@
+/** GENERAL **/
+body {
+    font-family: Verdana, sans-serif;
+    min-height: 740px;
+    background-color: #FFF;
+    -webkit-font-smoothing: antialiased;
+    font-size: x-large;
+}
+
+/** STEP STYLES **/
+.step {
+    width: 800px;
+    height: 800px;
+
+    display: block;    
+    border-radius: 10px;
+    color: black;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing:    border-box;
+    -ms-box-sizing:     border-box;
+    -o-box-sizing:      border-box;
+    box-sizing:         border-box;
+}
+
+
+.footer {   
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    
+    
+    text-align:left;
+
+
+    
+    word-wrap: normal;
+    height:auto;
+}
+
+
+.footer p , ul  {
+    
+    margin:0;
+    padding: 1em 1em 1em 2em;
+    color:#fff;
+    font-size: .75em;
+    word-wrap: normal;
+
+}
+
+p + ul {
+    margin-top: -20px;
+}
+
+li {
+   margin-left:20px;  
+   list-style: disc outside none;
+}
+
+
+#arrow-img {
+    position: absolute;
+    top: 300px;
+    left: 50px;
+}
+
+
+
+/*!
+CUSTOM ANIMATION
+ */
+
+@-webkit-keyframes arrow-jump {
+  0%   { opacity: 0;}
+  100% { opacity: 1; 
+        -webkit-transform: translateX(400px);
+        -moz-transform: translateX(400px);
+        -0-transform: translateX(0px);
+        transform: translateX(350px);
+    }
+}
+
+
+.do-shot {    
+  -webkit-animation: arrow-jump 2s infinite; /* Safari 4+ */
+  -moz-animation:    arrow-jump 2s infinite; /* Fx 5+ */
+  -o-animation:      arrow-jump 2s infinite; /* Opera 12+ */
+  animation:         arrow-jump 2s infinite; /* IE 10+, Fx 29+ */
+}

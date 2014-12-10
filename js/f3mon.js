@@ -945,8 +945,10 @@ function setControls(){
 }
 
 function reloader(){
-    window.location.href = "#"+runInfo.sysName;
-    if (runInfo.runNumber){window.location.href+=","+runInfo.runNumber}
+    if (window.location.hash) { 
+        window.location.href = "#"+runInfo.sysName;
+        if (runInfo.runNumber){window.location.href+=","+runInfo.runNumber}
+    }
     window.location.reload(true);
 };
 
@@ -972,7 +974,7 @@ function startItAll(){
 };
 
 function changeRun(runNumber){
-    if (runNumber){window.location.href = "#"+runInfo.sysName+","+runNumber}
+    if (window.location.hash) {if (runNumber){window.location.href = "#"+runInfo.sysName+","+runNumber} }
 
     runInfo.stop();
     riverStatus.stop()
